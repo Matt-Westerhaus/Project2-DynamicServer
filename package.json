@@ -3,26 +3,27 @@
     "version": "0.0.0",
     "description": "Dynamic Web Server using Node JS",
     "author": {
-        "name": "",
-        "email": ""
+        "name": "Matt Westerhaus",
+        "email": "mjwesterhaus@hotmail.com"
     },
     "contributors": [
         {
-            "name": "",
-            "email": ""
+            "name": "Jack Landwer",
+            "email": "land7738@stthomas.edu"
         },
         {
-            "name": "",
-            "email": ""
+            "name": "Tim Larson",
+            "email": "timmyjlarson@gmail.com"
         }
     ],
     "main": "server.js",
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/Matt-Westerhaus/Project2-DynamicServer"
     },
     "dependencies": {
         "express": "^4.18.2",
+        "node": "^14.21.0",
         "sqlite3": "^5.1.2"
     }
 }
