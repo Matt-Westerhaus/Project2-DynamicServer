@@ -56,6 +56,24 @@ app.get('/', (req, res) => {
     });
 });
 
+//This loads the metrics.html template for menu button click or for "/metrics.html" in url.
+app.get('/metrics.html', (req, res) => {
+    fs.readFile(path.join(template_dir, 'metrics.html'), (err, template) => {
+        // modify `template` and send response
+        // this will require a query to the SQL database
+        let query= 'SELECT * from drug_use';
+        response = "Query is: ";
+        db.all(query, [], (err, rows) => {
+            if (err) {
+              throw err;
+            }
+            rows.forEach((row) => {
+              console.log(row.name);
+            });
+            res.status(200).type('html').send(template); // <-- you may need to change this
+          });
+    });
+});
 
 
 
