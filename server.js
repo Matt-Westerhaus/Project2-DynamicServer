@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
             rows.forEach((row) => {
               console.log(row.name);
             });
-            res.status(200).type('html').send(response); // <-- you may need to change this
+            res.status(200).type('html').send(template); // <-- you may need to change this
           });
     });
 });
