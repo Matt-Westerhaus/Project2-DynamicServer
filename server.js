@@ -6,7 +6,6 @@ let path = require('path');
 let express = require('express');
 let sqlite3 = require('sqlite3');
 
-
 let public_dir = path.join(__dirname, 'public');
 let template_dir = path.join(__dirname, 'templates');
 let db_filename = path.join(__dirname, 'db', 'drug_db.sqlite3'); 
@@ -29,19 +28,18 @@ app.use(express.static(public_dir));
 
 
 // GET request handler for home page '/' (redirect to desired route)
-// app.get('/', (req, res) => {
-//     let home = ''; // <-- change this
-//     res.redirect(home);
+/*
+app.get('/', (req, res) => {
+    let home = '/templates/index.html'; // <-- change this
+    res.redirect(home);
 
-    
-// });
-
-
+});
+*/
 
 
 // Example GET request handler for data about a specific year
 app.get('/', (req, res) => {
-    fs.readFile(path.join(template_dir, 'year.html'), (err, template) => {
+    fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
         // modify `template` and send response
         // this will require a query to the SQL database
 
@@ -52,9 +50,11 @@ app.get('/', (req, res) => {
         db.all(query, [], (err, rows) => {
             response = response + query;
         });
-        res.status(200).type('html').send(query); // <-- you may need to change this
+        res.status(200).type('html').send(template); // <-- you may need to change this
     });
 });
+
+
 
 
 app.listen(port, () => {
