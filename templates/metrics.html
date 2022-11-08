@@ -5,9 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Drug Use by Age</title>
         <link rel="stylesheet" href="css/foundation.css" />
-        <!-- Decide if we want to use canvas with regular javascript or jquery -->
-        <script type="text/javascript" src="js/canvasjs-3/jquery.canvasjs.min.js"></script>  <!-- does the canvas folder go into the public/js folder? or outside of it? -->
-
+        <script type="application/javascript" src="js/canvasjs-3/jquery.canvasjs.min.js"></script> 
     </head>
 
     <body>
@@ -78,13 +76,7 @@
         $(document).foundation();
     </script>
 
-    <!-- need to download jquery into here... -->
-
-    <!-- </script>src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
-    </script>src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
-
     <script>
-        //Have a window onlood function that gets the data for the selected metric and loads it onto the page 
         window.onload = function(){
             //$('chartContainer').CanvasJSChart({ }) //could use jquery call instead 
             var chart = new CanvasJS.Chart('chartContainer', {
@@ -100,8 +92,9 @@
                 }]
                 */
             });
+            chart.render();
         }
-        chart.render();
+        
 
 
 
