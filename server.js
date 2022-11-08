@@ -8,7 +8,7 @@ let sqlite3 = require('sqlite3');
 
 let public_dir = path.join(__dirname, 'public');
 let template_dir = path.join(__dirname, 'templates');
-let db_filename = path.join(__dirname, 'db', 'drug_db.sqlite3'); 
+let db_filename = path.join(__dirname, 'db', 'drug_use.sqlite3'); 
 
 let app = express();
 let port = 8000;
@@ -42,15 +42,17 @@ app.get('/', (req, res) => {
     fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
         // modify `template` and send response
         // this will require a query to the SQL database
-
-
-        let query= 'SELECT * from drug_db';
+        let query= 'SELECT * from drug_use';
         response = "Query is: ";
-
         db.all(query, [], (err, rows) => {
-            response = response + query;
-        });
-        res.status(200).type('html').send(template); // <-- you may need to change this
+            if (err) {
+              throw err;
+            }
+            rows.forEach((row) => {
+              console.log(row.name);
+            });
+            res.status(200).type('html').send(response); // <-- you may need to change this
+          });
     });
 });
 
