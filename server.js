@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 */
 
 
-// Example GET request handler for data about a specific year
+//This loads the index.html template for menu button click or "/" in the url.
 app.get('/', (req, res) => {
     fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
         // modify `template` and send response
@@ -56,6 +56,7 @@ app.get('/', (req, res) => {
     });
 });
 
+//DELETE THIS AFTER DONE WITH THE 3 TEMPLATES
 //This loads the metrics.html template for menu button click or for "/metrics.html" in url.
 app.get('/metrics.html', (req, res) => {
     fs.readFile(path.join(template_dir, 'metrics.html'), (err, template) => {
@@ -73,6 +74,60 @@ app.get('/metrics.html', (req, res) => {
             res.status(200).type('html').send(template); // <-- you may need to change this
           });
     });
+});
+
+app.get('/drug-age.html', (req, res) => {
+  fs.readFile(path.join(template_dir, 'drug-age.html'), (err, template) => {
+      // modify `template` and send response
+      // this will require a query to the SQL database
+      let query= 'SELECT * from drug_use';
+      response = "Query is: ";
+      db.all(query, [], (err, rows) => {
+          if (err) {
+            throw err;
+          }
+          rows.forEach((row) => {
+            console.log(row.name);
+          });
+          res.status(200).type('html').send(template); // <-- you may need to change this
+        });
+  });
+});
+
+app.get('/drug-frequency.html', (req, res) => {
+  fs.readFile(path.join(template_dir, 'drug-frequency.html'), (err, template) => {
+      // modify `template` and send response
+      // this will require a query to the SQL database
+      let query= 'SELECT * from drug_use';
+      response = "Query is: ";
+      db.all(query, [], (err, rows) => {
+          if (err) {
+            throw err;
+          }
+          rows.forEach((row) => {
+            console.log(row.name);
+          });
+          res.status(200).type('html').send(template); // <-- you may need to change this
+        });
+  });
+});
+
+app.get('/drug-input.html', (req, res) => {
+  fs.readFile(path.join(template_dir, 'drug-input.html'), (err, template) => {
+      // modify `template` and send response
+      // this will require a query to the SQL database
+      let query= 'SELECT * from drug_use';
+      response = "Query is: ";
+      db.all(query, [], (err, rows) => {
+          if (err) {
+            throw err;
+          }
+          rows.forEach((row) => {
+            console.log(row.name);
+          });
+          res.status(200).type('html').send(template); // <-- you may need to change this
+        });
+  });
 });
 
 
