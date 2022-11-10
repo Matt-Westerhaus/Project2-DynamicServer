@@ -63,6 +63,11 @@
     <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
+            <div>
+                <button id="previous-button" type="button" style="border: 1px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px;" onclick="navButtons()">Previous</button>
+                <button id="next-button" type="button" style="border: 1px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px;" onclick="navButtons()">Next</button>
+            </div>
+
             <!-- put the canvas for the graphs here -->
             <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
                 <canvas id="chart" style="width:400px;"></canvas>
@@ -151,9 +156,21 @@
 
     //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
 
+    //creates sql query to get data for drug use by age 
+    function getDrugUseByAge(){
+
+
+    }
+
+    //controlls the navigation buttons
+    function navButtons(){
+        //if on drug-age, only have a next button.
+        //if on drug-frequency, have previous and next button.
+        //if on drug-input, only have a previous button.
 
 
 
+    }
 
 
 
