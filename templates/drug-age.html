@@ -63,9 +63,32 @@
     <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
-            <div>
-                <button id="previous-button" type="button" style="border: 1px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px;" onclick="navButtons()">Previous</button>
-                <button id="next-button" type="button" style="border: 1px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px;" onclick="navButtons()">Next</button>
+            <div id="nav-buttons">
+                <button id="previous-button" type="button" style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold;" onclick="navButtons()" hidden>Previous</button>
+                <button id="next-button" type="button" style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold;" onclick="navButtons()">Next</button>
+            </div>
+            <br/><br/><br/>
+            <div id="user-age-input-container" style="margin: auto; width: auto; display: flex; justify-content: center;">
+                <p>Select an age to see details:</p> &nbsp; &nbsp;
+                <select name="age" id="age-input-dropdown" style="width: 130px; " required>
+                    <option value="12" selected>12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22-23</option>
+                    <option value="24">24-25</option>
+                    <option value="26">26-29</option>
+                    <option value="30">30-34</option>
+                    <option value="35">35-49</option>
+                    <option value="50">50-64</option>
+                    <option value="65">65+</option>
+                </select>
             </div>
 
             <!-- put the canvas for the graphs here -->
@@ -115,8 +138,6 @@
     */
 
     window.onload = function () {
-        //$('chartContainer').CanvasJSChart({ }) //could use jquery call instead 
-        /*
         var chart = new CanvasJS.Chart('chartContainer', {
             type: "bar",
             title:{
@@ -127,7 +148,7 @@
                 datasets: [
                     {
                         label: "",
-                        data: '', //pass in as array type (use functions to build from database)
+                        data: '', 
                         backgroundColor: '',
                         yAxisID: '',
                     }
@@ -138,7 +159,7 @@
                     yAxes: [
                         {
                             id: '',
-                           ticks: {
+                            ticks: {
                                 beginAtZero: true,
                             },
                             scaleLabel: {
@@ -151,24 +172,32 @@
             },
         });    
         chart.render();
-        */
+        
     }
 
     //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
 
     //creates sql query to get data for drug use by age 
     function getDrugUseByAge(){
-
+        var specifiedAge = $('#user-input-dropdown').find(':selected').val();
+        window.open('drug-age.html/?age=' + specifiedAge); //opens page with user input as url params that are passed to the query
 
     }
 
     //controlls the navigation buttons
-    function navButtons(){
-        //if on drug-age, only have a next button.
-        //if on drug-frequency, have previous and next button.
-        //if on drug-input, only have a previous button.
-
-
+    function navButtons(direction){
+        var currentUrl = $(location).attr('href');
+        if(currentUrl.includes('drug-age.html')){ //if on drug-age, only have a next button.
+            window.open('drug-frequency.html');
+        } else if(currentUrl.includes('drug-frequency.html')){ //if on drug-frequency, have previous and next button.
+            if(direction === 'previous'){
+                window.open('drug-age.html');
+            } else if(direction === 'next'){
+                window.open('drug-frequency.html');
+            }
+        } else if(currentUrl.includes('drug-input.html')){ //if on drug-input, only have a previous button.
+            window.open('drug-frequency.html');
+        }
 
     }
 

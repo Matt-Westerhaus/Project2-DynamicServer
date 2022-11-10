@@ -76,24 +76,30 @@ app.get('/metrics.html', (req, res) => {
     });
 });
 
-app.get('/drug-age.html', (req, res) => {
+//Loads the drug-age.html page and executes the query to get the data for the selected age.
+app.get('/drug-age.html', (req, res) => { //Might have to change this to be more like the expressdynamic class example... 
+  let age = parseInt(req.params.age);
   fs.readFile(path.join(template_dir, 'drug-age.html'), (err, template) => {
-      // modify `template` and send response
-      // this will require a query to the SQL database
-      let query= 'SELECT * from drug_use';
-      response = "Query is: ";
-      db.all(query, [], (err, rows) => {
+      let query= 'SELECT * FROM drug_use';
+      params = [];
+      if(req.query.hasOwnProperty('age')){
+        query = query + ' WHERE age-group = ?';
+        let age = parseInt(req.query.age); 
+        params.push(age);
+      }
+      
+
+
+      db.all(query, params, (err, rows) => {
           if (err) {
             throw err;
           }
-          rows.forEach((row) => {
-            console.log(row.name);
-          });
-          res.status(200).type('html').send(template); // <-- you may need to change this
+          res.status(200).type('html').send(template); //is this sending type html or json?? 
         });
   });
 });
 
+//Loads the drug-frequency.html page and executes the query to get the data for the specific page 
 app.get('/drug-frequency.html', (req, res) => {
   fs.readFile(path.join(template_dir, 'drug-frequency.html'), (err, template) => {
       // modify `template` and send response
