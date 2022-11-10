@@ -41,7 +41,7 @@
                 <li><a href="/metrics.html">Metrics</a></li>
                 <li><a href="/drug-age.html">Drug Use by Age</a></li>
                 <li><a href="/drug-frequency.html">Drug use by Frequency</a></li>
-                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+                <li><a href="/input/alcohol/0/0">Drug Usuage By Input</a></li>
             </ul>
         </div>
 
@@ -55,7 +55,9 @@
                 <li><a href="/metrics.html">Metrics</a></li>
                 <li><a href="/drug-age.html">Drug Use by Age</a></li>
                 <li><a href="/drug-frequency.html">Drug use by Frequency</a></li>
-                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+                <li><a href="/input/alcohol/0/0">Drug Usuage By Input</a></li>
+            <!-- Why does this replace the last variable in my line instead of replacing the whole thing when I click metrics?--> 
+            <!-- Why doesn't our css etc work in this html file only when they were copy and pasted as the same thing?-->
             </ul>
         </div>
     </div>
@@ -63,11 +65,6 @@
     <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
-            <div>
-                <button id="previous-button" type="button" style="border: 1px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px;" onclick="navButtons()">Previous</button>
-                <button id="next-button" type="button" style="border: 1px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px;" onclick="navButtons()">Next</button>
-            </div>
-
             <!-- put the canvas for the graphs here -->
             <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
                 <canvas id="chart" style="width:400px;"></canvas>
@@ -90,7 +87,7 @@
 </script>
 
 <script>
-    /* Example of using canvasJS to make a bar chart:
+    /* Example of using canvasJS:
     var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
     var yValues = [55, 49, 44, 24, 15];
     var barColors = ["red", "green","blue","orange","brown"];
@@ -156,21 +153,9 @@
 
     //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
 
-    //creates sql query to get data for drug use by age 
-    function getDrugUseByAge(){
-
-
-    }
-
-    //controlls the navigation buttons
-    function navButtons(){
-        //if on drug-age, only have a next button.
-        //if on drug-frequency, have previous and next button.
-        //if on drug-input, only have a previous button.
 
 
 
-    }
 
 
 
