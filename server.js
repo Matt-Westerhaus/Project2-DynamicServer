@@ -118,22 +118,29 @@ app.get('/drug-frequency.html', (req, res) => {
   });
 });
 
-app.get('/drug-input.html', (req, res) => {
-  fs.readFile(path.join(template_dir, 'drug-input.html'), (err, template) => {
-      // modify `template` and send response
-      // this will require a query to the SQL database
-      let query= 'SELECT * from drug_use';
-      response = "Query is: ";
-      db.all(query, [], (err, rows) => {
-          if (err) {
-            throw err;
-          }
-          rows.forEach((row) => {
-            console.log(row.name);
+app.get('/input/:drug/:use/:freq', (req, res) => {
+    fs.readFile(path.join(template_dir, 'drug-input.html'), (err, template) => {
+
+        let use = req.params.drug +"_use";
+        let freq = req.params.drug +"_frequency";
+        let use_num = parseFloat(req.params.use);
+        let freq_num = parseFloat(req.params.freq);
+        
+        // modify `template` and send response
+        // this will require a query to the SQL database
+        let query = "SELECT age, number, " + use + ", " + freq + " FROM drug_use WHERE " + use + " >= " + use_num + " AND " + freq + " >= " +  freq_num;
+        response = "Query is: ";
+        console.log(query);
+        db.all(query, [], (err, rows) => {
+            if (err) {
+              throw err;
+            }
+            rows.forEach((row) => {
+              console.log(row);
+            });
+            res.status(200).type('html').send(template); // <-- you may need to change this
           });
-          res.status(200).type('html').send(template); // <-- you may need to change this
-        });
-  });
+    });
 });
 
 

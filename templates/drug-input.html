@@ -16,7 +16,7 @@
                 <button class="button" type="button" data-toggle="offCanvasLeft" style="float: left;">
                     <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">Drug Use by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">Drug Use by User Input</h1>
             </div>
         </div>
 
@@ -24,9 +24,9 @@
             <div class="title-bar-top show-for-small-only" style="text-align: center; display: block; margin: auto;">
                 <button class="button" type="button" data-toggle="offCanvasTop"
                     style="margin: auto; display: block; width: auto;">
-                    <span aria-hidden="true" style="color: white;">Menu</span>
+                    <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use by Input</h1>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
                 <li><a href="/metrics.html">Metrics</a></li>
                 <li><a href="/drug-age.html">Drug Use by Age</a></li>
                 <li><a href="/drug-frequency.html">Drug use by Frequency</a></li>
-                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+                <li><a href="/input/alcohol/0/0">Drug Usuage By Input</a></li>
             </ul>
         </div>
 
@@ -55,7 +55,9 @@
                 <li><a href="/metrics.html">Metrics</a></li>
                 <li><a href="/drug-age.html">Drug Use by Age</a></li>
                 <li><a href="/drug-frequency.html">Drug use by Frequency</a></li>
-                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+                <li><a href="/input/alcohol/0/0">Drug Usuage By Input</a></li>
+            <!-- Why does this replace the last variable in my line instead of replacing the whole thing when I click metrics?--> 
+            <!-- Why doesn't our css etc work in this html file only when they were copy and pasted as the same thing?-->
             </ul>
         </div>
     </div>
@@ -63,34 +65,6 @@
     <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
-            <div id="nav-buttons">
-                <button id="previous-button" type="button" style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold;" onclick="navButtons()" hidden>Previous</button>
-                <button id="next-button" type="button" style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold;" onclick="navButtons()">Next</button>
-            </div>
-            <br/><br/><br/>
-            <div id="user-age-input-container" style="margin: auto; width: auto; display: flex; justify-content: center;">
-                <p>Select an age to see details:</p> &nbsp; &nbsp;
-                <select name="age" id="age-input-dropdown" style="width: 130px; " required>
-                    <option value="12" selected>12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">21</option>
-                    <option value="22">22-23</option>
-                    <option value="24">24-25</option>
-                    <option value="26">26-29</option>
-                    <option value="30">30-34</option>
-                    <option value="35">35-49</option>
-                    <option value="50">50-64</option>
-                    <option value="65">65+</option>
-                </select>
-            </div>
-
             <!-- put the canvas for the graphs here -->
             <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
                 <canvas id="chart" style="width:400px;"></canvas>
@@ -113,7 +87,7 @@
 </script>
 
 <script>
-    /* Example of using canvasJS to make a bar chart:
+    /* Example of using canvasJS:
     var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
     var yValues = [55, 49, 44, 24, 15];
     var barColors = ["red", "green","blue","orange","brown"];
@@ -138,6 +112,8 @@
     */
 
     window.onload = function () {
+        //$('chartContainer').CanvasJSChart({ }) //could use jquery call instead 
+        /*
         var chart = new CanvasJS.Chart('chartContainer', {
             type: "bar",
             title:{
@@ -148,7 +124,7 @@
                 datasets: [
                     {
                         label: "",
-                        data: '', 
+                        data: '', //pass in as array type (use functions to build from database)
                         backgroundColor: '',
                         yAxisID: '',
                     }
@@ -159,7 +135,7 @@
                     yAxes: [
                         {
                             id: '',
-                            ticks: {
+                           ticks: {
                                 beginAtZero: true,
                             },
                             scaleLabel: {
@@ -172,34 +148,14 @@
             },
         });    
         chart.render();
-        
+        */
     }
 
     //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
 
-    //creates sql query to get data for drug use by age 
-    function getDrugUseByAge(){
-        var specifiedAge = $('#user-input-dropdown').find(':selected').val();
-        window.open('drug-age.html/?age=' + specifiedAge); //opens page with user input as url params that are passed to the query
 
-    }
 
-    //controlls the navigation buttons
-    function navButtons(direction){
-        var currentUrl = $(location).attr('href');
-        if(currentUrl.includes('drug-age.html')){ //if on drug-age, only have a next button.
-            window.open('drug-frequency.html');
-        } else if(currentUrl.includes('drug-frequency.html')){ //if on drug-frequency, have previous and next button.
-            if(direction === 'previous'){
-                window.open('drug-age.html');
-            } else if(direction === 'next'){
-                window.open('drug-frequency.html');
-            }
-        } else if(currentUrl.includes('drug-input.html')){ //if on drug-input, only have a previous button.
-            window.open('drug-frequency.html');
-        }
 
-    }
 
 
 
