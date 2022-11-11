@@ -120,7 +120,9 @@ app.get('/drug-frequency.html', (req, res) => {
 
 app.get('/input/:drug/:use/:freq', (req, res) => {
     fs.readFile(path.join(template_dir, 'drug-input.html'), (err, template) => {
+        let drug = req.params.drug;
 
+        let drug_capital = drug.charAt(0).toUpperCase() + drug.slice(1);
         let use = req.params.drug +"_use";
         let freq = req.params.drug +"_frequency";
         let use_num = parseFloat(req.params.use);
@@ -129,19 +131,38 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
         // modify `template` and send response
         // this will require a query to the SQL database
         let query = "SELECT age, number, " + use + ", " + freq + " FROM drug_use WHERE " + use + " >= " + use_num + " AND " + freq + " >= " +  freq_num;
-        response = "Query is: ";
-        console.log(query);
+        //let query1 = "SELECT age, number, ?, ? FROM drug_use WHERE ? >= ? AND ? >= ?";
         db.all(query, [], (err, rows) => {
-            if (err) {
-              throw err;
+            let response = template.toString();
+            //response = response.replace();
+            response = response.replace("%%"+drug+"_SELECTED%%", drug + " selected");
+            response = response.replace("%%USE_INPUT%%", use_num);
+            response = response.replace("%%FREQ_INPUT%%", freq_num);
+
+            if(rows.length!= 0){
+                response = response.replaceAll("%%DRUG%%", drug_capital);
+                let drug_data = " ";
+                for(let i=0; i< rows.length; i++){
+                    drug_data +="<tr>";
+                    drug_data +="<td>" + rows[i].age + "</td>";
+                    drug_data +="<td>" + rows[i].number + "</td>";
+                    drug_data +="<td>" + rows[i][use] + "% </td>";
+                    drug_data +="<td>" + rows[i][freq] + "</td>";
+                    drug_data +="</tr>";
+                }
+                response = response.replace("%%DRUG_DATA%%", drug_data);
+            } else {
+                response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
+                response = response.replace("%%DRUG_DATA%%", "Hello");
             }
-            rows.forEach((row) => {
-              console.log(row);
-            });
-            res.status(200).type('html').send(template); // <-- you may need to change this
+            
+
+            res.status(200).type('html').send(response);
           });
     });
 });
+
+
 
 
 

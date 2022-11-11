@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Drug Use by Age</title>
     <link rel="stylesheet" href="/css/foundation.css" />
+    <link rel="stylesheet" href="/css/drugs.css" />
     <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
     <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script>
 </head>
@@ -56,8 +57,6 @@
                 <li><a href="/drug-age.html">Drug Use by Age</a></li>
                 <li><a href="/drug-frequency.html">Drug use by Frequency</a></li>
                 <li><a href="/input/alcohol/0/0">Drug Usuage By Input</a></li>
-            <!-- Why does this replace the last variable in my line instead of replacing the whole thing when I click metrics?--> 
-            <!-- Why doesn't our css etc work in this html file only when they were copy and pasted as the same thing?-->
             </ul>
         </div>
     </div>
@@ -66,12 +65,77 @@
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
             <!-- put the canvas for the graphs here -->
+            <br/><br/><br/><br/><br/><br/>
+            <div class="grid-container">
+                <div class="grid-x grid-padding-x">
+                    <div class="cell large-auto" style="background-color: #BFB48F; text-align: center;">
+                    <p>Welcome to the chat!</p>
+                    
+                    </div>
+                </div>
+                <div class="grid-x grid-padding-x">
+                    <div class="cell small-9" style="background-color: #BFB48F;">
+                    Select a drug that you would like to see data on:
+                    </div>
+                    <div class="cell small-3" style="background-color: #BFB48F;">
+                        <select name="Drug Options" id="drugs_dropdown" style="text-align:center" value="%%DRUG_INPUT%%">
+                            <option value="alcohol" %%alcohol_SELECTED%%>Alcohol</option>
+                            <option value="marijuana" %%marijuana_SELECTED%%>Marijuana</option>
+                            <option value="cocaine" %%cocaine_SELECTED%%>Cocaine</option>
+                            <option value="crack" %%crack_SELECTED%%>Crack</option>
+                            <option value="heroin" %%heroin_SELECTED%%>Heroin</option>
+                            <option value="hallucinogen" %%hallucinogen_SELECTED%%>Hallucinogen</option>
+                            <option value="inhalant" %%inhalant_SELECTED%%>Inhalant</option>
+                            <option value="pain-relievers" %%pain-relievers_SELECTED%%>Pain Relievers</option>
+                            <option value="oxycontin" %%oxycontin_SELECTED%%>Oxycontin</option>
+                            <option value="tranquilizer" %%tranquilizer_SELECTED%%>Tranquilizer</option>
+                            <option value="stimulant" %%stimulant_SELECTED%%>Stimulant</option>
+                            <option value="meth" %%meth_SELECTED%%>Meth</option>
+                            <option value="sedative" %%sedative_SELECTED%%>Sedatives</option>
+                          </select>
+                    </div>
+                    <div class="cell small-9 " style="background-color: #BFB48F;">Select a desired minimum percentage of those in an age group who used alcohol in the past 12 months</div>
+                    <div class="cell small-3 " style="background-color: #BFB48F;">
+                        <input type="text" id="use_text" value="%%USE_INPUT%%" style="text-align:center">
+                    </div>
+                    <div class="cell small-9 " style="background-color: #BFB48F;">Select a desired minimum number of times the median user in an age group used your desired drug in the past 12 months</div>
+                    <div class="cell small-3" style="background-color: #BFB48F;">
+                        <input type="text" id="frequency_text" value="%%FREQ_INPUT%%" style="text-align:center">
+                    </div>
+                    <div class="cell small-10 " style="background-color: #BFB48F;"></div>
+                    <div class="cell small-2" style="background-color: #BFB48F;">
+                        <input type="submit" id="submit-input" onclick="submitted()">
+                    </div>
+                    <script>
+                        function submitted(){
+                            let drug_type = document.getElementById('drugs_dropdown').value;
+                            let use = document.getElementById('use_text').value;
+                            let freq = document.getElementById('frequency_text').value;
+                            window.location.href = '/input/' + drug_type + '/' + use + '/' + freq;
+                        }
+                    </script>
+                    
+                </div>
+                <table style="text-align:center; "><!--%%DISPLAYNONE%%-->
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">Age Group</th>
+                            <th style="text-align: center">Participants Surveyed</th>
+                            <th style="text-align: center">%%DRUG%% Usage Percentage</th>
+                            <th style="text-align: center">%%DRUG%% Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        %%DRUG_DATA%%
+                    </tbody>
+                </table>
+                
+                
+            </div>
+
             <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
                 <canvas id="chart" style="width:400px;"></canvas>
             </div>
-
-
-
             <!-- do we want to display the info with something other than graphs also?? -->
         </div>
     </div>
