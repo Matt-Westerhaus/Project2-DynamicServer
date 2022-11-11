@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Drug Use by Age</title>
     <link rel="stylesheet" href="/css/foundation.css" />
     <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
-    <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script>
+    <!-- <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script> -->
+    <script type="application/javascript" src="/js/canvasjs-3/canvasjs.min.js"></script>
 </head>
 
 <body style="background-color: lightgrey">
@@ -16,7 +18,8 @@
                 <button class="button" type="button" data-toggle="offCanvasLeft" style="float: left;">
                     <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">Drug Use by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">
+                    Drug Use by Age</h1>
             </div>
         </div>
 
@@ -26,7 +29,8 @@
                     style="margin: auto; display: block; width: auto;">
                     <span aria-hidden="true" style="color: white;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use
+                    by Age</h1>
             </div>
         </div>
     </div>
@@ -38,9 +42,8 @@
             </button>
             <ul class="vertical menu">
                 <li><a href="/">Home</a></li>
-                <li><a href="/metrics.html">Metrics</a></li>
-                <li><a href="/drug-age.html">Drug Use by Age</a></li>
-                <li><a href="/drug-frequency.html">Drug use by Frequency</a></li>
+                <li><a href="/drug-age/12">Drug Use by Age</a></li>
+                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
                 <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
             </ul>
         </div>
@@ -52,9 +55,8 @@
             </button>
             <ul class="horizontal menu">
                 <li><a href="/">Home</a></li>
-                <li><a href="/metrics.html">Metrics</a></li>
-                <li><a href="/drug-age.html">Drug Use by Age</a></li>
-                <li><a href="/drug-frequency.html">Drug use by Frequency</a></li>
+                <li><a href="/drug-age/12">Drug Use by Age</a></li>
+                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
                 <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
             </ul>
         </div>
@@ -64,13 +66,18 @@
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
             <div id="nav-buttons">
-                <button id="previous-button" type="button" style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold;" onclick="navButtons()" hidden>Previous</button>
-                <button id="next-button" type="button" style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold;" onclick="navButtons()">Next</button>
+                <button id="previous-button" type="button"
+                    style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold;"
+                    onclick="navButtons()" hidden>Previous</button>
+                <button id="next-button" type="button"
+                    style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold;"
+                    onclick="navButtons()">Next</button>
             </div>
-            <br/><br/><br/>
-            <div id="user-age-input-container" style="margin: auto; width: auto; display: flex; justify-content: center;">
+            <br /><br /><br />
+            <div id="user-age-input-container"
+                style="margin: auto; width: auto; display: flex; justify-content: center;">
                 <p>Select an age to see details:</p> &nbsp; &nbsp;
-                <select name="age" id="age-input-dropdown" style="width: 130px; " required>
+                <select name="age" id="age-input-dropdown" style="width: 130px;" onchange="getDrugUseByAge()" required>
                     <option value="12" selected>12</option>
                     <option value="13">13</option>
                     <option value="14">14</option>
@@ -91,17 +98,11 @@
                 </select>
             </div>
 
-            <!-- put the canvas for the graphs here -->
-            <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
-                <canvas id="chart" style="width:400px;"></canvas>
-            </div>
+            <div id="chartContainer" style="height: 500px; width: 90%; margin: auto;"></div>
 
 
-
-            <!-- do we want to display the info with something other than graphs also?? -->
         </div>
     </div>
-
 
 
 </body>
@@ -113,93 +114,95 @@
 </script>
 
 <script>
-    /* Example of using canvasJS to make a bar chart:
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = ["red", "green","blue","orange","brown"];
-
-    new Chart("myChart", {
-    type: "bar",
-    data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor: barColors,
-      data: yValues
-    }]
-    },
-    options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      text: "World Wine Production 2018"
-    }
-    }
-    });
-    */
-
     window.onload = function () {
         var chart = new CanvasJS.Chart('chartContainer', {
-            type: "bar",
-            title:{
+            title: {
                 text: 'Drug Use by Age'
             },
-            data: { 
+            axisY: {
+                title: 'percent'
+            },
+            data: [{
                 type: 'column',
-                datasets: [
-                    {
-                        label: "",
-                        data: '', 
-                        backgroundColor: '',
-                        yAxisID: '',
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [
-                        {
-                            id: '',
-                            ticks: {
-                                beginAtZero: true,
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: ''
-                            }
-                        },
-                    ]
-                },
-            },
-        });    
+                dataPoints: []
+            }]
+        });
         chart.render();
-        
-    }
 
-    //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
+    };
+
+    //Gets the age val from the url and parses it, sets the val to the dropdown list
+    $(document).ready(() => {
+        let ageVal = window.location.pathname;
+        let ageValInt = parseInt(ageVal.replace(/[^0-9]/g, ''));
+        $('#age-input-dropdown').val(ageValInt);
+    });
+
+    //parses the string of values from json
+    function parseJsonVals(){
+        let vals = $('#returned-json').val();
+        let arr = vals.split(',');
+        let chartArr = [];
+        let i;
+        for(i = 0; i < arr.length; i++){
+            if(i = 0){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "# people"}';
+            } else if(i = 1){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "alcohol"}';
+            } else if(i = 3){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "marijuana"}';
+            } else if(i = 4){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "cocaine"}';
+            } else if(i = 5){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "crack"}';
+            } else if(i = 6){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "heroin"}';
+            } else if(i = 7){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "hallucinogen"}';
+            } else if(i = 8){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "inhalant"}';
+            } else if(i = 9){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "pain reliever"}';
+            } else if(i = 10){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "oxycontin"}';
+            } else if(i = 11){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "tranquilizer"}';
+            } else if(i = 12){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "stimulant"}';
+            } else if(i = 13){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "meth"}';
+            } else if(i = 14){
+                chartArr[i] = '{y: ' + arr[i] + ', label: "sedative"}';
+            }
+            chart.data[0].addTo('dataPoints', chartArr[i]);
+        }
+        chart.render();
+    };
 
     //creates sql query to get data for drug use by age 
-    function getDrugUseByAge(){
-        var specifiedAge = $('#user-input-dropdown').find(':selected').val();
-        window.open('drug-age.html/?age=' + specifiedAge); //opens page with user input as url params that are passed to the query
-
-    }
+    function getDrugUseByAge() {
+        var specifiedAge = parseInt($('#age-input-dropdown').val());
+        window.open(specifiedAge, '_self');
+    };
 
     //controlls the navigation buttons
-    function navButtons(direction){
+    function navButtons(direction) { //GONNA HAVE TO CHANGE THE VALUES IN OPEN() CAUSE WINDOW.OPEN APPENDS THE VALUE TO THE CURRENT URL. ADD '_SELF' TO OPEN IN SAME WINDOW.
         var currentUrl = $(location).attr('href');
-        if(currentUrl.includes('drug-age.html')){ //if on drug-age, only have a next button.
-            window.open('drug-frequency.html');
-        } else if(currentUrl.includes('drug-frequency.html')){ //if on drug-frequency, have previous and next button.
-            if(direction === 'previous'){
-                window.open('drug-age.html');
-            } else if(direction === 'next'){
-                window.open('drug-frequency.html');
+        if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
+            window.open('drug-frequency');
+        } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
+            if (direction === 'previous') {
+                window.open('drug-age/12');
+            } else if (direction === 'next') {
+                window.open('drug-frequency');
             }
-        } else if(currentUrl.includes('drug-input.html')){ //if on drug-input, only have a previous button.
-            window.open('drug-frequency.html');
+        } else if (currentUrl.includes('input')) { //if on drug-input, only have a previous button.
+            if (direction === 'previous') {
+                window.open('drug-frequency');
+            }
         }
 
-    }
+    };
 
 
 
