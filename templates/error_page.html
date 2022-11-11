@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drug Use by Frequency</title>
+    <link rel="stylesheet" href="/css/foundation.css" />
+    <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
+    <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script>
+</head>
+
+<body style="background-color: #F2EFE9">
+    <div class="off-canvas-wrapper">
+        <div class="title-bar show-for-medium" style="background-color: #252627;">
+            <div class="title-bar-left show-for-medium" style="text-align: center; background-color: #252627;">
+                <button class="button" type="button" data-toggle="offCanvasLeft" style="float: left;">
+                    <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
+                </button>
+                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">Drug Use by Frequency</h1>
+            </div>
+        </div>
+
+        <div class="title-bar show-for-small-only">
+            <div class="title-bar-top show-for-small-only" style="text-align: center; display: block; margin: auto;">
+                <button class="button" type="button" data-toggle="offCanvasTop"
+                    style="margin: auto; display: block; width: auto;">
+                    <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
+                </button>
+                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use by Frequency</h1>
+            </div>
+        </div>
+    </div>
+    <div class="off-canvas-wrapper">
+        <div class="off-canvas position-left show-for-medium" id="offCanvasLeft" data-transition="overlap"
+            data-off-canvas>
+            <button class="button" aria-label="Close menu" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul class="vertical menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/drug-age/12">Drug Use by Age</a></li>
+                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
+                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+            </ul>
+        </div>
+
+        <div class="off-canvas position-top show-for-small-only" id="offCanvasTop" data-transition="push"
+            data-off-canvas>
+            <button class="button" aria-label="Close menu" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul class="horizontal menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/drug-age/12">Drug Use by Age</a></li>
+                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
+                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Page contents go below here: -->
+    <div class="off-canvas-wrapper">
+        <div class="off-canvas-content" data-off-canvas-content>
+            <!-- put the canvas for the graphs here -->
+            <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
+                <canvas id="chart" style="width:400px;"></canvas>
+            </div>
+
+            <h1>404 Error: %%ERROR_MESSAGE%% </h1>
+
+            <!-- do we want to display the info with something other than graphs also?? -->
+        </div>
+    </div>
+
+
+
+</body>
+
+<script src="/js/vendor.js"></script>
+<script src="/js/foundation.js"></script>
+<script type="application/javascript">
+    $(document).foundation();
+</script>
+
+<script>
+    /* Example of using canvasJS to make a bar chart:
+    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+    var yValues = [55, 49, 44, 24, 15];
+    var barColors = ["red", "green","blue","orange","brown"];
+
+    new Chart("myChart", {
+    type: "bar",
+    data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+    },
+    options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "World Wine Production 2018"
+    }
+    }
+    });
+    */
+
+    window.onload = function () {
+        //$('chartContainer').CanvasJSChart({ }) //could use jquery call instead 
+        /*
+        var chart = new CanvasJS.Chart('chartContainer', {
+            type: "bar",
+            title:{
+                text: 'Drug Use by Frequency'
+            },
+            data: { 
+                type: 'column',
+                datasets: [
+                    {
+                        label: "",
+                        data: '', //pass in as array type (use functions to build from database)
+                        backgroundColor: '',
+                        yAxisID: '',
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            id: '',
+                           ticks: {
+                                beginAtZero: true,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: ''
+                            }
+                        },
+                    ]
+                },
+            },
+        });    
+        chart.render();
+        */
+    }
+
+    //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
+
+
+
+
+
+
+
+</script>
+
+</html>
