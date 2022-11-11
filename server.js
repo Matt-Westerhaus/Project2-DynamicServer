@@ -48,19 +48,17 @@ app.get('/', (req, res) => {
       if (err) {
         throw err;
       }
-      res.status(200).type('html').send(template); // <-- you may need to change this
+      res.status(200).type('html').send(template); 
     });
   });
 });
 
 
 //Loads the drug-age.html page and executes the query to get the data for the selected age.
-app.get('/drug-age/:age', (req, res) => { //Might have to change this to be more like the expressdynamic class example... 
+app.get('/drug-age/:age', (req, res) => {
   fs.readFile(path.join(template_dir, 'drug-age.html'), (err, template) => {
     let age = parseInt(req.params.age);
     let query = 'SELECT number, alcohol_use, marijuana_use, cocaine_use, crack_use, heroin_use, hallucinogen_use, inhalant_use, pain_releiver_use, oxycontin_use, tranquilizer_use, stimulant_use, meth_use, sedative_use FROM drug_use WHERE age_group = ' + age;
-    console.log(query);
-
     db.all(query, [], (err, rows) => {
       if (err) {
         throw err;
@@ -68,26 +66,27 @@ app.get('/drug-age/:age', (req, res) => { //Might have to change this to be more
       rows.forEach((row) => {
         console.log(row);
       });
-      template = template + '<p id="returned-json">';
+      template = template.toString();
+      let dataArray = '[';
       rows.forEach((row) => {
-        template = template + row.number + ', ';
-        template = template + row.alcohol_use + ', ';
-        template = template + row.marijuana_use + ', ';
-        template = template + row.cocaine_use + ', ';
-        template = template + row.crack_use + ', ';
-        template = template + row.heroin_use + ', ';
-        template = template + row.hallucinogen_use + ', ';
-        template = template + row.inhalant_use + ', ';
-        template = template + row.pain_releiver_use + ', ';
-        template = template + row.oxycontin_use + ', ';
-        template = template + row.tranquilizer_use + ', ';
-        template - template + row.stimulant_use + ', ';
-        template = template + row.meth_use + ', ';
-        template = template + row.sedative_use + ', ';
-
+        dataArray = dataArray + row.number + ', ';
+        dataArray = dataArray+ row.alcohol_use + ', ';
+        dataArray = dataArray + row.marijuana_use + ', ';
+        dataArray= dataArray + row.cocaine_use + ', ';
+        dataArray= dataArray + row.crack_use + ', ';
+        dataArray = dataArray + row.heroin_use + ', ';
+        dataArray = dataArray + row.hallucinogen_use + ', ';
+        dataArray = dataArray + row.inhalant_use + ', ';
+        dataArray= dataArray + row.pain_releiver_use + ', ';
+        dataArray = dataArray + row.oxycontin_use + ', ';
+        dataArray = dataArray + row.tranquilizer_use + ', ';
+        dataArray = dataArray + row.stimulant_use + ', ';
+        dataArray = dataArray + row.meth_use + ', ';
+        dataArray = dataArray + row.sedative_use;
       })
-      template = template +'</p>';
-      res.status(200).type('html').send(template); //html & template, or json & rows
+      dataArray = dataArray + ']';
+      template = template.replace('"%%DATAARRAY%%"', dataArray);
+      res.status(200).type('html').send(template); 
     });
   });
 });

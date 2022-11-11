@@ -62,7 +62,6 @@
         </div>
     </div>
 
-    <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
             <div id="nav-buttons">
@@ -98,8 +97,15 @@
                 </select>
             </div>
 
-            <div id="chartContainer" style="height: 500px; width: 90%; margin: auto;"></div>
+            <div id="chartContainer" style="height: 500px; width: 90%; margin: auto;"></div> 
 
+            <!-- PUT INSTRUCTIONS ABOUT HOW TO USE THE CHART AND THE ZOOM/PAN FUNCTIONALITY HERE-->
+            <div style="width: 75%; margin: auto; margin-top: 10px; text-align: center; border: 1px solid black;">
+                <h1 style="font-size: 15px; font-weight: bold;">Instructions:</h1>
+                <p>Select an age/age group from the dropdown menu to see that age's drug usage</p>
+                <p>Highlight a section in the chart to zoom in on those specific values. When done, click the reset button at the top right to go back to the original graph.</p>
+
+            </div>
 
         </div>
     </div>
@@ -114,128 +120,79 @@
 </script>
 
 <script>
-    window.onload = function () {
-        var chart = new CanvasJS.Chart('chartContainer', {
-            title: {
-                text: 'Drug Use by Age'
-            },
-            axisY: {
-                title: 'percent'
-            },
-            data: [{
-                type: 'column',
-                dataPoints: [
 
-                ]
-            }]
-        });
-        chart.render();
+    var chart = new CanvasJS.Chart('chartContainer', {
+        zoomEnabled: true,
+        panEnabled: true,
+        title: {
+            text: 'Drug Use by Age'
+        },
+        axisY: {
+            title: 'Percent of Age Group'
+        },
+        axisX: {
+            title: 'Drug'
+        },
+        data: [{
+            dataPoints: []
+        }
+        ]
+    });
 
-        $(document).ready(() => {
-            let vals = $('#returned-json').text();
-            let arr = vals.split(',');
-            let chartArr = [];
-            let i;
-            console.log(arr.length);
-            for (i = 0; i < arr.length; i++) {
-                console.log(arr[i]);
-                if (i == 0) {
-                    //console.log((+ arr[i]));
-                    chartArr[i] = { y: (+ arr[i]), label: "# people" };
-                }
-                if (i == 1) {
-                    chartArr[i] = { y: (+ arr[i]), label: "alcohol" };
-                }
-                if (i == 2) {
-                    chartArr[i] = { y: (+ arr[i]), label: "marijuana" };
-                }
-                if (i == 3) {
-                    chartArr[i] = { y: (+ arr[i]), label: "cocaine" };
-                }
-                if (i == 4) {
-                    chartArr[i] = { y: (+ arr[i]), label: "crack" };
-                }
-                if (i == 5) {
-                    chartArr[i] = { y: (+ arr[i]), label: "heroin" };
-                }
-                if (i == 6) {
-                    chartArr[i] = { y: (+ arr[i]), label: "hallucinogen" };
-                }
-                if (i == 7) {
-                    chartArr[i] = { y: (+ arr[i]), label: "inhalant" };
-                }
-                if (i == 8) {
-                    chartArr[i] = { y: (+ arr[i]), label: "pain reliever" };
-                }
-                if (i == 9) {
-                    chartArr[i] = { y: (+ arr[i]), label: "oxycontin" };
-                }
-                if (i == 10) {
-                    chartArr[i] = { y: (+ arr[i]), label: "tranquilizer" };
-                }
-                if (i == 11) {
-                    chartArr[i] = { y: (+ arr[i]), label: "stimulant" };
-                }
-                if (i == 12) {
-                    chartArr[i] = { y: (+ arr[i]), label: "meth" };
-                }
-                if (i == 13) {
-                    chartArr[i] = { y: (+ arr[i]), label: "sedative" };
-                }
-                console.log(chartArr[i])
-                chart.options.data.push(chartArr[i]);
-            }
-            chart.render();
-        });
-    };
+    let arr = "%%DATAARRAY%%";
+    let chartArr = [];
+    let i;
+    for (i = 0; i < arr.length; i++) {
+        if (i == 0) {
+            chartArr[i] = { y: arr[i], label: "# people" };
+        } else if (i == 1) {
+            chartArr[i] = { y: arr[i], label: "alcohol" };
+        } else if (i == 2) {
+            chartArr[i] = { y: arr[i], label: "marijuana" };
+        } else if (i == 3) {
+            chartArr[i] = { y: arr[i], label: "cocaine" };
+        } else if (i == 4) {
+            chartArr[i] = { y: arr[i], label: "crack" };
+        } else if (i == 5) {
+            chartArr[i] = { y: arr[i], label: "heroin" };
+        } else if (i == 6) {
+            chartArr[i] = { y: arr[i], label: "hallucinogen" };
+        } else if (i == 7) {
+            chartArr[i] = { y: arr[i], label: "inhalant" };
+        } else if (i == 8) {
+            chartArr[i] = { y: arr[i], label: "pain reliever" };
+        } else if (i == 9) {
+            chartArr[i] = { y: arr[i], label: "oxycontin" };
+        } else if (i == 10) {
+            chartArr[i] = { y: arr[i], label: "tranquilizer" };
+        } else if (i == 11) {
+            chartArr[i] = { y: arr[i], label: "stimulant" };
+        } else if (i == 12) {
+            chartArr[i] = { y: arr[i], label: "meth" };
+        } else if (i == 13) {
+            chartArr[i] = { y: arr[i], label: "sedative" };
+        } else {
+            //do nothing, -> i++
+        }
+
+        if (i == 0) { //if i = 1, then set to variable to hold total # people. else push to chart
+
+        } else {
+            chart.options.data[0].dataPoints.push(chartArr[i]); 
+        }
+
+    }
+    chart.render();
+
+
+
 
     //Gets the age val from the url and parses it, sets the val to the dropdown list
-    $(document).ready(() => {
+    $(document).ready(() => { //REPLACE THIS WITH %%BLAH%% IN HTML AND REPLACE IT WITH THE VALUE
         let ageVal = window.location.pathname;
         let ageValInt = parseInt(ageVal.replace(/[^0-9]/g, ''));
         $('#age-input-dropdown').val(ageValInt);
     });
-
-    //parses the string of values from json
-    function parseJsonVals() {
-        let vals = $('#returned-json').val();
-        let arr = vals.split(',');
-        let chartArr = [];
-        let i;
-        for (i = 0; i < arr.length; i++) {
-            if (i = 0) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "# people"}';
-            } else if (i = 1) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "alcohol"}';
-            } else if (i = 3) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "marijuana"}';
-            } else if (i = 4) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "cocaine"}';
-            } else if (i = 5) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "crack"}';
-            } else if (i = 6) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "heroin"}';
-            } else if (i = 7) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "hallucinogen"}';
-            } else if (i = 8) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "inhalant"}';
-            } else if (i = 9) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "pain reliever"}';
-            } else if (i = 10) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "oxycontin"}';
-            } else if (i = 11) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "tranquilizer"}';
-            } else if (i = 12) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "stimulant"}';
-            } else if (i = 13) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "meth"}';
-            } else if (i = 14) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "sedative"}';
-            }
-            chart.data[0].addTo('dataPoints', chartArr[i]);
-        }
-        chart.render();
-    };
 
     //creates sql query to get data for drug use by age 
     function getDrugUseByAge() {
