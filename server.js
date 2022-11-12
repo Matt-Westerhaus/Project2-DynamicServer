@@ -150,8 +150,8 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     let query = 'SELECT age, ' + drugUse + ", " + drugFrequency + ' FROM drug_use ORDER BY ' + order + ' DESC, ' + secondaryOrder + ' DESC';
     //some fuckery with null values
     console.log(query);
-
-    response = template.toString();
+  
+    let response = template.toString();
     response = response.replaceAll("%%DRUG%%", nameCapital);
     response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
     db.all(query, [], (err, rows) => {
@@ -161,6 +161,10 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
       let table = "";
       for(let i =0; i<rows.length; i++) {
         console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
+        if(rows[i][drugFrequency] == "''"){
+          rows[i][drugFrequency] = 0;
+          console.log("test");
+        }
         table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
       };
       response = response.replace("%%DRUG_DATA%%", table);

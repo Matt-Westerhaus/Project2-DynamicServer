@@ -95,7 +95,10 @@
                     </div>
                     <div class="cell small-9 " style="background-color: #BFB48F;">Select the order you would like the data displayed in: </div>
                     <div class="cell small-3" style="background-color: #BFB48F;">
-                        <input type="text" id="order_text" value="%%DRUG_ORDER%%" style="text-align:center"> //change to dropdown
+                        <select name="Order Options" id="order_dropdown" style="text-align:center" value="%%DRUG_ORDER%%">
+                            <option value="use" %%use_SELECTED%%>Use</option>
+                            <option value="frequency" %%frequency_SELECTED%%>Frequency</option>
+                          </select>
                     </div>
                     <div class="cell small-10 " style="background-color: #BFB48F;"></div>
                     <div class="cell small-2" style="background-color: #BFB48F;">
@@ -104,7 +107,7 @@
                     <script>
                         function submitted(){
                             let name = document.getElementById('drugs_dropdown').value;
-                            let order = document.getElementById('order_text').value.toLowerCase();
+                            let order = document.getElementById('order_dropdown').value.toLowerCase();
                             window.location.href = '/drug-frequency/' + name + '/' + order;
                         }
                     </script>
