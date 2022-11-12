@@ -39,7 +39,7 @@
             <ul class="vertical menu">
                 <li><a href="/">Home</a></li>
                 <li><a href="/drug-age/12">Drug Use by Age</a></li>
-                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
+                <li><a href="/drug-frequency/alcohol/use">Drug use by Frequency</a></li>
                 <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
             </ul>
         </div>
@@ -52,7 +52,7 @@
             <ul class="horizontal menu">
                 <li><a href="/">Home</a></li>
                 <li><a href="/drug-age/12">Drug Use by Age</a></li>
-                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
+                <li><a href="/drug-frequency/alcohol/use">Drug use by Frequency</a></li>
                 <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
             </ul>
         </div>
@@ -68,11 +68,72 @@
             </div>
 
             <!-- put the canvas for the graphs here -->
-            <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
-                <canvas id="chart" style="width:400px;"></canvas>
+            <br/><br/><br/>
+            <div id="chartContainer" style="height: 1000px; width: 75%; margin: auto;">
+                <!--<canvas id="chart" style="width:400px;"></canvas> -->
+                <div class="grid-x grid-padding-x">
+
+                    <div class="cell large-auto" style="background-color: #BFB48F; text-align: center; border:3px solid #252627; ">
+                        <h3 style="margin-bottom: 2px;">Instructions:</h3>
+                       <p>    In the  first dropbox choose a drug that you would like to collect data on. <br/>
+                           In the second dropbox choose how you would like them ordered <br/>
+                       </p>                      
+                    </div>
+                    </div>
+                    <div class="grid-x grid-padding-x">
+                    <div class="cell small-9" style="background-color: #BFB48F;">
+                    Select a drug that you would like to see data on:
+                    </div>
+                    <div class="cell small-3" style="background-color: #BFB48F">
+                        <select name="Drug Options" id="drugs_dropdown" style="text-align:center; margin-top: 5px" value="%%DRUG%%">
+                            <option value="alcohol" %%alcohol_SELECTED%%>Alcohol</option>
+                            <option value="marijuana" %%marijuana_SELECTED%%>Marijuana</option>
+                            <option value="cocaine" %%cocaine_SELECTED%%>Cocaine</option>
+                            <option value="crack" %%crack_SELECTED%%>Crack</option>
+                            <option value="heroin" %%heroin_SELECTED%%>Heroin</option>
+                            <option value="hallucinogen" %%hallucinogen_SELECTED%%>Hallucinogen</option>
+                            <option value="inhalant" %%inhalant_SELECTED%%>Inhalant</option>
+                            <option value="pain_releiver" %%pain_releiver_SELECTED%%>Pain Relievers</option>
+                            <option value="oxycontin" %%oxycontin_SELECTED%%>Oxycontin</option>
+                            <option value="tranquilizer" %%tranquilizer_SELECTED%%>Tranquilizer</option>
+                            <option value="stimulant" %%stimulant_SELECTED%%>Stimulant</option>
+                            <option value="meth" %%meth_SELECTED%%>Meth</option>
+                            <option value="sedative" %%sedative_SELECTED%%>Sedatives</option>
+                          </select>
+                    </div>
+                    <div class="cell small-9 " style="background-color: #BFB48F;">Select the order you would like the data displayed in: </div>
+                    <div class="cell small-3" style="background-color: #BFB48F;">
+                        <select name="Order Options" id="order_dropdown" style="text-align:center" value="%%DRUG_ORDER%%">
+                            <option value="use" %%use_SELECTED%%>Use</option>
+                            <option value="frequency" %%frequency_SELECTED%%>Frequency</option>
+                          </select>
+                    </div>
+                    <div class="cell small-10 " style="background-color: #BFB48F;"></div>
+                    <div class="cell small-2" style="background-color: #BFB48F;">
+                        <input type="submit" id="submit-input" onclick="submitted()">
+                    </div>
+                    <script>
+                        function submitted(){
+                            let name = document.getElementById('drugs_dropdown').value;
+                            let order = document.getElementById('order_dropdown').value.toLowerCase();
+                            window.location.href = '/drug-frequency/' + name + '/' + order;
+                        }
+                    </script>
+                <table style="text-align:center; ">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">Age Group</th>
+                            <th style="text-align: center">%%DRUG%% Usage Percentage</th>
+                            <th style="text-align: center">%%DRUG%% Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        %%DRUG_DATA%%
+                    </tbody>
+                </table>
+                
             </div>
-
-
+            <!-- do we want to display the info with something other than graphs also?? -->
         </div>
     </div>
 
@@ -92,7 +153,7 @@
 function navButtons(direction) {
         var currentUrl = $(location).attr('href');
         if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
-            location.replace('/drug-frequency/0');
+            location.replace('/drug-frequency/alcohol/use');
         } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
             if (direction === 'previous') {
                 location.replace('/drug-age/12');
@@ -101,7 +162,7 @@ function navButtons(direction) {
             }
         } else if (currentUrl.includes('input')) { //if on drug-input, only have a previous button.
             if (direction === 'previous') {
-                location.replace('/drug-frequency/0');
+                location.replace('/drug-frequency/alcohol/use');
             }
         }
     };

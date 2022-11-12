@@ -130,20 +130,62 @@ app.get('/drug-age/:age', (req, res) => {
   });
 });
 
-//Loads the drug-frequency.html page and executes the query to get the data for the specific page 
-app.get('/drug-frequency/:freq', (req, res) => {
+//Loads the drug-frequency.html page and executes the query to get the data for the specific page
+app.get('/drug-frequency/:name/:order', (req, res) => {
   fs.readFile(path.join(template_dir, 'drug-frequency.html'), (err, template) => {
     // modify `template` and send response
     // this will require a query to the SQL database
-    let query = 'SELECT * from drug_use';
+    let name = req.params.name;
+    let drugUse = req.params.name + '_use';
+    let order = name + "_" + req.params.order;
+    let formOrder = req.params.order.charAt(0).toUpperCase() + req.params.order.slice(1)
+    let drugFrequency = req.params.name + '_frequency';
+    let nameCapital = name.charAt(0).toUpperCase() + name.slice(1);
+    let secondaryOrder = "";
+    if(order === name + '_frequency'){
+      secondaryOrder = name + '_use';
+    } else{
+      secondaryOrder = name + '_frequency';
+    }
+    let query = 'SELECT age, ' + drugUse + ", " + drugFrequency + ' FROM drug_use ORDER BY ' + order + ' DESC, ' + secondaryOrder + ' DESC';
+    //some fuckery with null values
+    console.log(query);
+  
+    let response = template.toString();
+    if(name == 'pain_releiver'){
+      response = response.replaceAll("%%DRUG%%", 'Pain Relievers');
+    } else{
+      response = response.replaceAll("%%DRUG%%", nameCapital);
+    }
+    response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
+    response = response.replace("%%"+name+"_SELECTED%%", name + " selected"); 
     db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      rows.forEach((row) => {
-        //console.log(row.name);
-      });
-      res.status(200).type('html').send(template); // <-- you may need to change this
+        if(rows != null) {
+            if (err) {
+                fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                    let error_response = error_page.toString();
+                    error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                    res.status(404).type('html').send(error_response); 
+                });
+            }
+            let table = "";
+            for(let i =0; i<rows.length; i++) {
+              console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
+              if(rows[i][drugFrequency] == ''){
+                rows[i][drugFrequency] = 'No data provided';
+                console.log("test"); //test
+              }
+              table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
+            };
+            response = response.replace("%%DRUG_DATA%%", table);
+            res.status(200).type('html').send(response); // <-- you may need to change this
+        } else {
+            fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                let error_response = error_page.toString();
+                error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                res.status(404).type('html').send(error_response); 
+            });
+        }
     });
   });
 });
@@ -171,7 +213,12 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
             response = response.replace("%%FREQ_INPUT%%", freq_num);
             if (rows!= null){ 
                 if(rows.length!= 0){
-                    response = response.replaceAll("%%DRUG%%", drug_capital);
+                    if(drug == "pain_releiver") {
+                        response = response.replaceAll("%%DRUG%%", "Pain Relievers");
+                    } else {
+                        response = response.replaceAll("%%DRUG%%", drug_capital);
+
+                    }
                     let drug_data = " ";
                     for(let i=0; i< rows.length; i++){
                         drug_data +="<tr>";
@@ -182,6 +229,7 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
                         drug_data +="</tr>";
                     }
                     response = response.replace("%%DRUG_DATA%%", drug_data);
+                    
                 } else {
                     response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
                     response = response.replace("%%DRUG_DATA%%", "");
