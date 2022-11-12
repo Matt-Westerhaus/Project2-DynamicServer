@@ -171,12 +171,9 @@
             chartArr[i] = { y: arr[i], label: "sedative" };
         } 
 
-        if (i == 0) { //if i = 1, then set to variable to hold total # people. else push to chart
-
-        } else {
+        if (i != 1) { // 1 holds sample size #
             chart.options.data[0].dataPoints.push(chartArr[i]); 
         }
-
     }
     chart.render();
 
@@ -184,9 +181,7 @@
 
 
     //Gets the age val from the url and parses it, sets the val to the dropdown list
-    $(document).ready(() => { //REPLACE THIS WITH %%BLAH%% IN HTML AND REPLACE IT WITH THE VALUE
-        //let ageVal = window.location.pathname;
-        //let ageValInt = parseInt(ageVal.replace(/[^0-9]/g, ''));
+    $(document).ready(() => { 
         $('#age-input-dropdown').val("%%AGEVAL%%");
     });
 
