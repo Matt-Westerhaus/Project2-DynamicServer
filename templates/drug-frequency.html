@@ -68,6 +68,7 @@
             </div>
 
             <!-- put the canvas for the graphs here -->
+            <br/><br/><br/>
             <div id="chartContainer" style="height: 1000px; width: 75%; margin: auto;">
                 <!--<canvas id="chart" style="width:400px;"></canvas> -->
                 <div class="grid-x grid-padding-x">
@@ -76,8 +77,8 @@
                     <div class="cell small-9" style="background-color: #BFB48F;">
                     Select a drug that you would like to see data on:
                     </div>
-                    <div class="cell small-3" style="background-color: #BFB48F;">
-                        <select name="Drug Options" id="drugs_dropdown" style="text-align:center" value="%%DRUG%%">
+                    <div class="cell small-3" style="background-color: #BFB48F">
+                        <select name="Drug Options" id="drugs_dropdown" style="text-align:center; margin-top: 5px" value="%%DRUG%%">
                             <option value="alcohol" %%alcohol_SELECTED%%>Alcohol</option>
                             <option value="marijuana" %%marijuana_SELECTED%%>Marijuana</option>
                             <option value="cocaine" %%cocaine_SELECTED%%>Cocaine</option>
@@ -85,7 +86,7 @@
                             <option value="heroin" %%heroin_SELECTED%%>Heroin</option>
                             <option value="hallucinogen" %%hallucinogen_SELECTED%%>Hallucinogen</option>
                             <option value="inhalant" %%inhalant_SELECTED%%>Inhalant</option>
-                            <option value="pain-relievers" %%pain-relievers_SELECTED%%>Pain Relievers</option>
+                            <option value="pain_releiver" %%pain_releiver_SELECTED%%>Pain Relievers</option>
                             <option value="oxycontin" %%oxycontin_SELECTED%%>Oxycontin</option>
                             <option value="tranquilizer" %%tranquilizer_SELECTED%%>Tranquilizer</option>
                             <option value="stimulant" %%stimulant_SELECTED%%>Stimulant</option>
@@ -145,7 +146,7 @@
 function navButtons(direction) {
         var currentUrl = $(location).attr('href');
         if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
-            location.replace('/drug-frequency/0');
+            location.replace('/drug-frequency/alcohol/use');
         } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
             if (direction === 'previous') {
                 location.replace('/drug-age/12');

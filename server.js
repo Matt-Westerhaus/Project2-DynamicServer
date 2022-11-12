@@ -152,8 +152,13 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     console.log(query);
   
     let response = template.toString();
-    response = response.replaceAll("%%DRUG%%", nameCapital);
+    if(name = 'pain_releiver'){
+      response = response.replaceAll("%%DRUG%%", 'Pain Relievers');
+    } else{
+      response = response.replaceAll("%%DRUG%%", nameCapital);
+    }
     response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
+    response = response.replace("%%"+name+"_SELECTED%%", name + " selected"); //fix this
     db.all(query, [], (err, rows) => {
       if (err) {
         throw err;
@@ -161,8 +166,8 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
       let table = "";
       for(let i =0; i<rows.length; i++) {
         console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
-        if(rows[i][drugFrequency] == "''"){
-          rows[i][drugFrequency] = 0;
+        if(rows[i][drugFrequency] == ''){
+          rows[i][drugFrequency] = 'No data provided';
           console.log("test"); //test
         }
         table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";

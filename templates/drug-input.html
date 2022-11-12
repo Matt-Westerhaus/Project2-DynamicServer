@@ -168,7 +168,7 @@
     function navButtons(direction) {
         var currentUrl = $(location).attr('href');
         if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
-            location.replace('/drug-frequency/0');
+            location.replace('/drug-frequency/alcohol/use');
         } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
             if (direction === 'previous') {
                 location.replace('/drug-age/12');
