@@ -172,10 +172,7 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
           rows[i][drugFrequency] = 'No data provided';
           //console.log("test"); //test
         }
-        table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
-      };
-      response = response.replace("%%DRUG_DATA%%", table);
-      res.status(200).type('html').send(response); // <-- you may need to change this
+      }
     });
   });
 });
@@ -187,8 +184,8 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
         let drug_capital = drug.charAt(0).toUpperCase() + drug.slice(1);
         let use = req.params.drug +"_use";
         let freq = req.params.drug +"_frequency";
-        let use_num = parseFloat(req.params.use);
-        let freq_num = parseFloat(req.params.freq);
+        let use_num = req.params.use;
+        let freq_num = req.params.freq;
         
         // modify `template` and send response
         // this will require a query to the SQL database
