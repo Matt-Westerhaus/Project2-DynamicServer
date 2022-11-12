@@ -197,8 +197,8 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
         let drug_capital = drug.charAt(0).toUpperCase() + drug.slice(1);
         let use = req.params.drug +"_use";
         let freq = req.params.drug +"_frequency";
-        let use_num = parseFloat(req.params.use);
-        let freq_num = parseFloat(req.params.freq);
+        let use_num = req.params.use;
+        let freq_num = req.params.freq;
         
         // modify `template` and send response
         // this will require a query to the SQL database
