@@ -72,7 +72,7 @@
                 style="margin: auto; width: auto; display: flex; justify-content: center;">
                 <p>Select an age to see details:</p> &nbsp; &nbsp;
                 <select name="age" id="age-input-dropdown" style="width: 130px;" onchange="getDrugUseByAge()" required>
-                    <option value="12" selected>12</option>
+                    <option value="12">12</option>
                     <option value="13">13</option>
                     <option value="14">14</option>
                     <option value="15">15</option>
@@ -185,9 +185,9 @@
 
     //Gets the age val from the url and parses it, sets the val to the dropdown list
     $(document).ready(() => { //REPLACE THIS WITH %%BLAH%% IN HTML AND REPLACE IT WITH THE VALUE
-        let ageVal = window.location.pathname;
-        let ageValInt = parseInt(ageVal.replace(/[^0-9]/g, ''));
-        $('#age-input-dropdown').val(ageValInt);
+        //let ageVal = window.location.pathname;
+        //let ageValInt = parseInt(ageVal.replace(/[^0-9]/g, ''));
+        $('#age-input-dropdown').val("%%AGEVAL%%");
     });
 
     //loads the page with the selected age value from the drop-down list

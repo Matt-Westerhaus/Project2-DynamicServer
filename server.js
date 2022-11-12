@@ -65,7 +65,30 @@ app.get('/', (req, res) => {
 app.get('/drug-age/:age', (req, res) => {
   fs.readFile(path.join(template_dir, 'drug-age.html'), (err, template) => {
     let age = parseInt(req.params.age);
+    if(age <= 12){
+      age = 12;
+    } else if(12 <= age && age <= 21){
+      age = age;
+    } else if(age == 22 || age == 23){
+      age = 22;
+    } else if(age == 24 || age == 25){
+      age = 24;
+    } else if(26 <= age && age <= 29){
+      age = 26;
+    } else if(30 <= age && age <= 34){
+      age = 30;
+    } else if(35 <= age && age <= 49){
+      age = 35;
+    } else if(50 <= age && age<= 64){
+      age = 50;
+    } else if(age >= 65){
+      age = 65;
+    } else if(age > 100){
+      age = 65;
+    }
+
     let query = 'SELECT number, alcohol_use, marijuana_use, cocaine_use, crack_use, heroin_use, hallucinogen_use, inhalant_use, pain_releiver_use, oxycontin_use, tranquilizer_use, stimulant_use, meth_use, sedative_use FROM drug_use WHERE age_group = ' + age;
+    
     db.all(query, [], (err, rows) => {
         if (err) {
             fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
@@ -78,19 +101,19 @@ app.get('/drug-age/:age', (req, res) => {
               console.log(row);
             });
             template = template.toString();
-            let samSize = '';
+            let sampSize = '';
             let dataArray = '[';
             rows.forEach((row) => {
               sampSize = row.number;
               dataArray = dataArray + row.number + ', ';
               dataArray = dataArray+ row.alcohol_use + ', ';
               dataArray = dataArray + row.marijuana_use + ', ';
-              dataArray= dataArray + row.cocaine_use + ', ';
-              dataArray= dataArray + row.crack_use + ', ';
+              dataArray = dataArray + row.cocaine_use + ', ';
+              dataArray = dataArray + row.crack_use + ', ';
               dataArray = dataArray + row.heroin_use + ', ';
               dataArray = dataArray + row.hallucinogen_use + ', ';
               dataArray = dataArray + row.inhalant_use + ', ';
-              dataArray= dataArray + row.pain_releiver_use + ', ';
+              dataArray = dataArray + row.pain_releiver_use + ', ';
               dataArray = dataArray + row.oxycontin_use + ', ';
               dataArray = dataArray + row.tranquilizer_use + ', ';
               dataArray = dataArray + row.stimulant_use + ', ';
@@ -100,6 +123,7 @@ app.get('/drug-age/:age', (req, res) => {
             dataArray = dataArray + ']';
             template = template.replace('"%%DATAARRAY%%"', dataArray);
             template = template.replace('%%SUBTITLE%%', sampSize);
+            template = template.replace("%%AGEVAL%%", age);
             res.status(200).type('html').send(template); 
         }
     });
