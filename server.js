@@ -78,8 +78,10 @@ app.get('/drug-age/:age', (req, res) => {
               console.log(row);
             });
             template = template.toString();
+            let samSize = '';
             let dataArray = '[';
             rows.forEach((row) => {
+              sampSize = row.number;
               dataArray = dataArray + row.number + ', ';
               dataArray = dataArray+ row.alcohol_use + ', ';
               dataArray = dataArray + row.marijuana_use + ', ';
@@ -97,6 +99,7 @@ app.get('/drug-age/:age', (req, res) => {
             })
             dataArray = dataArray + ']';
             template = template.replace('"%%DATAARRAY%%"', dataArray);
+            template = template.replace('%%SUBTITLE%%', sampSize);
             res.status(200).type('html').send(template); 
         }
     });
@@ -114,7 +117,7 @@ app.get('/drug-frequency/:freq', (req, res) => {
         throw err;
       }
       rows.forEach((row) => {
-        console.log(row.name);
+        //console.log(row.name);
       });
       res.status(200).type('html').send(template); // <-- you may need to change this
     });

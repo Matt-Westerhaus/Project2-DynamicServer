@@ -1,113 +1,213 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Drug Use</title>
-        <link rel="stylesheet" href="/css/foundation.css" />
-        <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
-        <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script>
-    </head>
 
-    <body style="background-color: lightgrey">
-        <div class="off-canvas-wrapper">
-            <div class="title-bar show-for-medium" style="background-color: #252627;">
-                <div class="title-bar-left show-for-medium" style="text-align: center; background-color: #252627;">
-                    <button class="button" type="button" data-toggle="offCanvasLeft" style="float: left;">
-                        <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
-                    </button>
-                    <h1 style="text-align: center; font-size: 2.75; display: inline-block; margin: auto; width: auto;">Drug Use</h1>
-                </div>
-            </div>
-    
-            <div class="title-bar show-for-small-only">
-                <div class="title-bar-top show-for-small-only" style="text-align: center; display: block; margin: auto;">
-                    <button class="button" type="button" data-toggle="offCanvasTop" style="margin: auto; display: block; width: auto;">
-                        <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
-                    </button>
-                    <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use</h1>
-                </div>
-            </div>
-        </div>
-        <div class="off-canvas-wrapper">
-            <div class="off-canvas position-left show-for-medium" id="offCanvasLeft" data-transition="overlap" data-off-canvas>
-                <button class="button" aria-label="Close menu" type="button" data-close>
-                    <span aria-hidden="true">&times;</span>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drug Use</title>
+    <link rel="stylesheet" href="/css/foundation.css" />
+    <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
+    <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script>
+</head>
+
+<body style="background-color: lightgrey">
+    <div class="off-canvas-wrapper">
+        <div class="title-bar show-for-medium" style="background-color: #252627;">
+            <div class="title-bar-left show-for-medium" style="text-align: center; background-color: #252627;">
+                <button class="button" type="button" data-toggle="offCanvasLeft" style="float: left;">
+                    <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
                 </button>
-                <ul class="vertical menu">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/drug-age/12">Drug Use by Age</a></li>
-                    <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
-                    <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
-                </ul>
+                <h1 style="text-align: center; font-size: 2.75; display: inline-block; margin: auto; width: auto;">Drug
+                    Use</h1>
             </div>
-    
-            <div class="off-canvas position-top show-for-small-only" id="offCanvasTop" data-transition="push" data-off-canvas>
-                <button class="button" aria-label="Close menu" type="button" data-close>
-                    <span aria-hidden="true">&times;</span>
+        </div>
+
+        <div class="title-bar show-for-small-only">
+            <div class="title-bar-top show-for-small-only" style="text-align: center; display: block; margin: auto;">
+                <button class="button" type="button" data-toggle="offCanvasTop"
+                    style="margin: auto; display: block; width: auto;">
+                    <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
                 </button>
-                <ul class="horizontal menu">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/drug-age/12">Drug Use by Age</a></li>
-                    <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
-                    <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
-                </ul>
+                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use
+                </h1>
             </div>
         </div>
+    </div>
+    <div class="off-canvas-wrapper">
+        <div class="off-canvas position-left show-for-medium" id="offCanvasLeft" data-transition="overlap"
+            data-off-canvas>
+            <button class="button" aria-label="Close menu" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul class="vertical menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/drug-age/12">Drug Use by Age</a></li>
+                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
+                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+            </ul>
+        </div>
 
-        <!-- Think about what all we want to display on this page...-->
+        <div class="off-canvas position-top show-for-small-only" id="offCanvasTop" data-transition="push"
+            data-off-canvas>
+            <button class="button" aria-label="Close menu" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul class="horizontal menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/drug-age/12">Drug Use by Age</a></li>
+                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
+                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+            </ul>
+        </div>
+    </div>
 
-        <!-- Page contents go here -->
-        <div class="off-canvas-wrapper"> 
-            <div class="off-canvas-content" data-off-canvas-content> 
-
-                <!-- put info about our data here -->
-                <p>Try not to do drugs kids!</p>
-
-                <div style="width: 80%; margin: auto;">
-                    <h1>Information about our data set</h1>
-                    <p>This data contains information about how baby boomers get high.</p>
-                    <p>Source: <a href="https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health">National Survey on Drug Use and Health from the Substance Abuse and Mental Health Data Archive</a></p>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Header</th>
-                                    <th>Definition</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <code>alcohol-use</code>
-                                    </td>
-                                    <td>Percentage of those in an age group who used alcohol in the past 12 months</td>
-                                </tr>
-                                <tr>
-
-                                </tr>
-
-
-
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="off-canvas-wrapper">
+        <div class="off-canvas-content" data-off-canvas-content>
+            <div id="info-container" style="width: 80%; margin: auto;">
+                <h1 style="font-size: 40px;">Information about our data set:</h1>
+                <p>This data contains information about how baby boomers get high.</p>
+                <p>Use the menu button at the top to navigate between the pages to see the different views on the data.</p>
+                <p>Source: <a href="https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health">National Survey on Drug Use and Health from the Substance Abuse and Mental Health Data Archive</a></p>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Definition</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <code>alcohol-use</code>
+                                </td>
+                                <td>Percentage of those in an age group who used alcohol in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <code>alcohol-frequency</code>
+                                </td>
+                                <td>Median number of times a user in an age group used alcohol in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <code>marijuana-use</code>
+                                </td>
+                                <td>Percentage of those in an age group who used marijuana in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>marijuana-frequency</code></td>
+                                <td>Median number of times a user in an age group used marijuana in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>cocaine-use</code></td>
+                                <td>Percentage of those in an age group who used cocaine in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>cocaine-frequency</code></td>
+                                <td>Median number of times a user in an age group used cocaine in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>crack-use</code></td>
+                                <td>Percentage of those in an age group who used crack in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>crack-frequency</code></td>
+                                <td>Median number of times a user in an age group used crack in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>heroin-use</code></td>
+                                <td>Percentage of those in an age group who used heroin in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>heroin-frequency</code></td>
+                                <td>Median number of times a user in an age group used heroin in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>hallucinogen-use</code></td>
+                                <td>Percentage of those in an age group who used hallucinogens in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>hallucinogen-frequency</code></td>
+                                <td>Median number of times a user in an age group used hallucinogens in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>inhalant-use</code></td>
+                                <td>Percentage of those in an age group who used inhalants in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>inhalant-frequency</code></td>
+                                <td>Median number of times a user in an age group used inhalants in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>pain-releiver-use</code></td>
+                                <td>Percentage of those in an age group who used pain relievers in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>pain-releiver-frequency</code></td>
+                                <td>Median number of times a user in an age group used pain relievers in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>oxycontin-use</code></td>
+                                <td>Percentage of those in an age group who used oxycontin in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>oxycontin-frequency</code></td>
+                                <td>Median number of times a user in an age group used oxycontin in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>tranquilizer-use</code></td>
+                                <td>Percentage of those in an age group who used tranquilizer in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>tranquilizer-frequency</code></td>
+                                <td>Median number of times a user in an age group used tranquilizer in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>stimulant-use</code></td>
+                                <td>Percentage of those in an age group who used stimulants in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>stimulant-frequency</code></td>
+                                <td>Median number of times a user in an age group used stimulants in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>meth-use</code></td>
+                                <td>Percentage of those in an age group who used meth in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>meth-frequency</code></td>
+                                <td>Median number of times a user in an age group used meth in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>sedative-use</code></td>
+                                <td>Percentage of those in an age group who used sedatives in the past 12 months</td>
+                            </tr>
+                            <tr>
+                                <td><code>sedative-frequency</code></td>
+                                <td>Median number of times a user in an age group used sedatives in the past 12 months</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
         </div>
+    </div>
 
 
 
-    </body>
 
-    <script src="js/vendor.js"></script>
-    <script src="js/foundation.js"></script>
-    <script type="application/javascript">
-        $(document).foundation();
-    </script>
 
-    <script>
+</body>
 
-    </script>
+<script src="js/vendor.js"></script>
+<script src="js/foundation.js"></script>
+<script type="application/javascript">
+    $(document).foundation();
+</script>
+
+<script>
+
+</script>
+
 </html>

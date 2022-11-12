@@ -9,7 +9,7 @@
     <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script>
 </head>
 
-<body style="background-color: #F2EFE9">
+<body style="background-color: lightgrey">
     <div class="off-canvas-wrapper">
         <div class="title-bar show-for-medium" style="background-color: #252627;">
             <div class="title-bar-left show-for-medium" style="text-align: center; background-color: #252627;">
@@ -61,14 +61,18 @@
     <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
+            <!-- previous/next buttons -->
+            <div id="nav-buttons">
+                <button id="previous-button" type="button" style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('previous')">Previous</button>
+                <button id="next-button" type="button" style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('next')">Next</button>
+            </div>
+
             <!-- put the canvas for the graphs here -->
             <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
                 <canvas id="chart" style="width:400px;"></canvas>
             </div>
 
 
-
-            <!-- do we want to display the info with something other than graphs also?? -->
         </div>
     </div>
 
@@ -83,71 +87,25 @@
 </script>
 
 <script>
-    /* Example of using canvasJS to make a bar chart:
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = ["red", "green","blue","orange","brown"];
 
-    new Chart("myChart", {
-    type: "bar",
-    data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor: barColors,
-      data: yValues
-    }]
-    },
-    options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      text: "World Wine Production 2018"
-    }
-    }
-    });
-    */
+//controlls the navigation buttons
+function navButtons(direction) {
+        var currentUrl = $(location).attr('href');
+        if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
+            location.replace('/drug-frequency/0');
+        } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
+            if (direction === 'previous') {
+                location.replace('/drug-age/12');
+            } else if (direction === 'next') {
+                location.replace('/input/alcohol/0/0');
+            }
+        } else if (currentUrl.includes('input')) { //if on drug-input, only have a previous button.
+            if (direction === 'previous') {
+                location.replace('/drug-frequency/0');
+            }
+        }
+    };
 
-    window.onload = function () {
-        //$('chartContainer').CanvasJSChart({ }) //could use jquery call instead 
-        /*
-        var chart = new CanvasJS.Chart('chartContainer', {
-            type: "bar",
-            title:{
-                text: 'Drug Use by Frequency'
-            },
-            data: { 
-                type: 'column',
-                datasets: [
-                    {
-                        label: "",
-                        data: '', //pass in as array type (use functions to build from database)
-                        backgroundColor: '',
-                        yAxisID: '',
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [
-                        {
-                            id: '',
-                           ticks: {
-                                beginAtZero: true,
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: ''
-                            }
-                        },
-                    ]
-                },
-            },
-        });    
-        chart.render();
-        */
-    }
-
-    //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
 
 
 

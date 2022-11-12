@@ -7,8 +7,8 @@
     <title>Drug Use by Age</title>
     <link rel="stylesheet" href="/css/foundation.css" />
     <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
-    <!-- <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script> -->
-    <script type="application/javascript" src="/js/canvasjs-3/canvasjs.min.js"></script>
+    <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script> 
+    <!-- <script type="application/javascript" src="/js/canvasjs-3/canvasjs.min.js"></script> -->
 </head>
 
 <body style="background-color: lightgrey">
@@ -18,19 +18,16 @@
                 <button class="button" type="button" data-toggle="offCanvasLeft" style="float: left;">
                     <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">
-                    Drug Use by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">Drug Use by Age</h1>
             </div>
         </div>
 
         <div class="title-bar show-for-small-only">
             <div class="title-bar-top show-for-small-only" style="text-align: center; display: block; margin: auto;">
-                <button class="button" type="button" data-toggle="offCanvasTop"
-                    style="margin: auto; display: block; width: auto;">
+                <button class="button" type="button" data-toggle="offCanvasTop" style="margin: auto; display: block; width: auto;">
                     <span aria-hidden="true" style="color: white;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use
-                    by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use by Age</h1>
             </div>
         </div>
     </div>
@@ -64,15 +61,13 @@
 
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
+            <!-- previous/next buttons -->
             <div id="nav-buttons">
-                <button id="previous-button" type="button"
-                    style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold;"
-                    onclick="navButtons()" hidden>Previous</button>
-                <button id="next-button" type="button"
-                    style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold;"
-                    onclick="navButtons()">Next</button>
+                <button id="previous-button" type="button" style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('previous')" hidden>Previous</button>
+                <button id="next-button" type="button" style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('next')">Next</button>
             </div>
             <br /><br /><br />
+            <!-- Age input drop-down option list -->
             <div id="user-age-input-container"
                 style="margin: auto; width: auto; display: flex; justify-content: center;">
                 <p>Select an age to see details:</p> &nbsp; &nbsp;
@@ -97,12 +92,13 @@
                 </select>
             </div>
 
+            <!-- Chart -->
             <div id="chartContainer" style="height: 500px; width: 90%; margin: auto;"></div> 
 
-            <!-- PUT INSTRUCTIONS ABOUT HOW TO USE THE CHART AND THE ZOOM/PAN FUNCTIONALITY HERE-->
+            <!-- Instructions container -->
             <div style="width: 75%; margin: auto; margin-top: 10px; text-align: center; border: 1px solid black;">
-                <h1 style="font-size: 15px; font-weight: bold;">Instructions:</h1>
-                <p>Select an age/age group from the dropdown menu to see that age's drug usage</p>
+                <h1 style="font-size: 20px; font-weight: bold;">Instructions:</h1>
+                <p>Select an age/age group from the dropdown menu to see that age's drug usage data.</p>
                 <p>Highlight a section in the chart to zoom in on those specific values. When done, click the reset button at the top right to go back to the original graph.</p>
 
             </div>
@@ -127,6 +123,9 @@
         title: {
             text: 'Drug Use by Age'
         },
+        subtitles: [{
+            text: 'Sample size: %%SUBTITLE%%'
+        }],
         axisY: {
             title: 'Percent of Age Group'
         },
@@ -135,8 +134,7 @@
         },
         data: [{
             dataPoints: []
-        }
-        ]
+        }]
     });
 
     let arr = "%%DATAARRAY%%";
@@ -171,9 +169,7 @@
             chartArr[i] = { y: arr[i], label: "meth" };
         } else if (i == 13) {
             chartArr[i] = { y: arr[i], label: "sedative" };
-        } else {
-            //do nothing, -> i++
-        }
+        } 
 
         if (i == 0) { //if i = 1, then set to variable to hold total # people. else push to chart
 
@@ -194,29 +190,28 @@
         $('#age-input-dropdown').val(ageValInt);
     });
 
-    //creates sql query to get data for drug use by age 
+    //loads the page with the selected age value from the drop-down list
     function getDrugUseByAge() {
         var specifiedAge = parseInt($('#age-input-dropdown').val());
         window.open(specifiedAge, '_self');
     };
 
     //controlls the navigation buttons
-    function navButtons(direction) { //GONNA HAVE TO CHANGE THE VALUES IN OPEN() CAUSE WINDOW.OPEN APPENDS THE VALUE TO THE CURRENT URL. ADD '_SELF' TO OPEN IN SAME WINDOW.
+    function navButtons(direction) {
         var currentUrl = $(location).attr('href');
         if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
-            window.open('drug-frequency');
+            location.replace('/drug-frequency/0');
         } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
             if (direction === 'previous') {
-                window.open('drug-age/12');
+                location.replace('/drug-age/12');
             } else if (direction === 'next') {
-                window.open('drug-frequency');
+                location.replace('/input/alcohol/0/0');
             }
         } else if (currentUrl.includes('input')) { //if on drug-input, only have a previous button.
             if (direction === 'previous') {
-                window.open('drug-frequency');
+                location.replace('/drug-frequency/0');
             }
         }
-
     };
 
 
