@@ -5,6 +5,8 @@ let path = require('path');
 // NPM modules
 let express = require('express');
 let sqlite3 = require('sqlite3');
+const { response } = require('express');
+const e = require('express');
 
 let public_dir = path.join(__dirname, 'public');
 let template_dir = path.join(__dirname, 'templates');
@@ -39,18 +41,23 @@ app.get('/', (req, res) => {
 
 //This loads the index.html template for menu button click or "/" in the url.
 app.get('/', (req, res) => {
-  fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
-    // modify `template` and send response
-    // this will require a query to the SQL database
-    let query = 'SELECT * from drug_use';
-    response = "Query is: ";
-    db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      res.status(200).type('html').send(template); 
-    });
-  });
+    try{
+        fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
+            // modify `template` and send response
+            // this will require a query to the SQL database
+            let query = 'SELECT * from drug_use';
+            db.all(query, [], (err, rows) => {
+              if (err) {
+                throw err;
+              }
+              res.status(200).type('html').send(template); 
+            });
+        });
+    } catch (err) {
+        fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+            res.status(404).type('html').send(error_page); 
+        });
+    }
 });
 
 
@@ -60,33 +67,38 @@ app.get('/drug-age/:age', (req, res) => {
     let age = parseInt(req.params.age);
     let query = 'SELECT number, alcohol_use, marijuana_use, cocaine_use, crack_use, heroin_use, hallucinogen_use, inhalant_use, pain_releiver_use, oxycontin_use, tranquilizer_use, stimulant_use, meth_use, sedative_use FROM drug_use WHERE age_group = ' + age;
     db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      rows.forEach((row) => {
-        console.log(row);
-      });
-      template = template.toString();
-      let dataArray = '[';
-      rows.forEach((row) => {
-        dataArray = dataArray + row.number + ', ';
-        dataArray = dataArray+ row.alcohol_use + ', ';
-        dataArray = dataArray + row.marijuana_use + ', ';
-        dataArray= dataArray + row.cocaine_use + ', ';
-        dataArray= dataArray + row.crack_use + ', ';
-        dataArray = dataArray + row.heroin_use + ', ';
-        dataArray = dataArray + row.hallucinogen_use + ', ';
-        dataArray = dataArray + row.inhalant_use + ', ';
-        dataArray= dataArray + row.pain_releiver_use + ', ';
-        dataArray = dataArray + row.oxycontin_use + ', ';
-        dataArray = dataArray + row.tranquilizer_use + ', ';
-        dataArray = dataArray + row.stimulant_use + ', ';
-        dataArray = dataArray + row.meth_use + ', ';
-        dataArray = dataArray + row.sedative_use;
-      })
-      dataArray = dataArray + ']';
-      template = template.replace('"%%DATAARRAY%%"', dataArray);
-      res.status(200).type('html').send(template); 
+        if (err) {
+            fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                let error_response = error_page.toString();
+                error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                res.status(404).type('html').send(error_response); 
+            });
+        } else {
+            rows.forEach((row) => {
+              console.log(row);
+            });
+            template = template.toString();
+            let dataArray = '[';
+            rows.forEach((row) => {
+              dataArray = dataArray + row.number + ', ';
+              dataArray = dataArray+ row.alcohol_use + ', ';
+              dataArray = dataArray + row.marijuana_use + ', ';
+              dataArray= dataArray + row.cocaine_use + ', ';
+              dataArray= dataArray + row.crack_use + ', ';
+              dataArray = dataArray + row.heroin_use + ', ';
+              dataArray = dataArray + row.hallucinogen_use + ', ';
+              dataArray = dataArray + row.inhalant_use + ', ';
+              dataArray= dataArray + row.pain_releiver_use + ', ';
+              dataArray = dataArray + row.oxycontin_use + ', ';
+              dataArray = dataArray + row.tranquilizer_use + ', ';
+              dataArray = dataArray + row.stimulant_use + ', ';
+              dataArray = dataArray + row.meth_use + ', ';
+              dataArray = dataArray + row.sedative_use;
+            })
+            dataArray = dataArray + ']';
+            template = template.replace('"%%DATAARRAY%%"', dataArray);
+            res.status(200).type('html').send(template); 
+        }
     });
   });
 });
@@ -97,7 +109,6 @@ app.get('/drug-frequency/:freq', (req, res) => {
     // modify `template` and send response
     // this will require a query to the SQL database
     let query = 'SELECT * from drug_use';
-    response = "Query is: ";
     db.all(query, [], (err, rows) => {
       if (err) {
         throw err;
@@ -124,38 +135,52 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
         // this will require a query to the SQL database
         let query = "SELECT age, number, " + use + ", " + freq + " FROM drug_use WHERE " + use + " >= " + use_num + " AND " + freq + " >= " +  freq_num;
         //let query1 = "SELECT age, number, ?, ? FROM drug_use WHERE ? >= ? AND ? >= ?";
+        
         db.all(query, [], (err, rows) => {
             let response = template.toString();
             //response = response.replace();
             response = response.replace("%%"+drug+"_SELECTED%%", drug + " selected");
             response = response.replace("%%USE_INPUT%%", use_num);
             response = response.replace("%%FREQ_INPUT%%", freq_num);
-
-            if(rows.length!= 0){
-                response = response.replaceAll("%%DRUG%%", drug_capital);
-                let drug_data = " ";
-                for(let i=0; i< rows.length; i++){
-                    drug_data +="<tr>";
-                    drug_data +="<td>" + rows[i].age + "</td>";
-                    drug_data +="<td>" + rows[i].number + "</td>";
-                    drug_data +="<td>" + rows[i][use] + "% </td>";
-                    drug_data +="<td>" + rows[i][freq] + "</td>";
-                    drug_data +="</tr>";
+            if (rows!= null){ 
+                if(rows.length!= 0){
+                    response = response.replaceAll("%%DRUG%%", drug_capital);
+                    let drug_data = " ";
+                    for(let i=0; i< rows.length; i++){
+                        drug_data +="<tr>";
+                        drug_data +="<td>" + rows[i].age + "</td>";
+                        drug_data +="<td>" + rows[i].number + "</td>";
+                        drug_data +="<td>" + rows[i][use] + "% </td>";
+                        drug_data +="<td>" + rows[i][freq] + "</td>";
+                        drug_data +="</tr>";
+                    }
+                    response = response.replace("%%DRUG_DATA%%", drug_data);
+                } else {
+                    response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
+                    response = response.replace("%%DRUG_DATA%%", "");
+                    response = response.replace('<p style="display:none;"> ', '<p> ');
+                    response = response.replace("//%%ALERT_FLAG%%", "alert('No Ages Meet These Criteria');");
                 }
-                response = response.replace("%%DRUG_DATA%%", drug_data);
+                res.status(200).type('html').send(response);
             } else {
-                response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
-                response = response.replace("%%DRUG_DATA%%", "Hello");
+                fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                    let error_response = error_page.toString();
+                    error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                    res.status(404).type('html').send(error_response); 
+                });
             }
-            
-
-            res.status(200).type('html').send(response);
-          });
+        });
+        
     });
 });
 
-
-
+app.use((req, res, next) => {
+    fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+        let error_response = error_page.toString();
+        error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+        res.status(404).type('html').send(error_response); 
+    });
+})
 
 
 app.listen(port, () => {

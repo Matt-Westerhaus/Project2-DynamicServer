@@ -62,11 +62,17 @@
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
             <!-- put the canvas for the graphs here -->
-            <div id="chartContainer" style="height: 500px; width: 50%; margin: auto;">
-                <canvas id="chart" style="width:400px;"></canvas>
-            </div>
-
-            <h1>404 Error: %%ERROR_MESSAGE%% </h1>
+            
+            <br/><br/>
+            <h1 style="text-align: center; font-size: 4rem">404 Error: The page, localhost:8000%%PAGE_ERROR_MESSAGE%%, does not exist.</h1>
+            <br/><br/>
+            <h3 style="text-align: center;"> Go back to safety with any of these links:</h3>
+            <ul style="text-align: center; font-size:2rem; list-style:none;">
+                <li><a href="/">Home</a></li>
+                <li><a href="/drug-age/12">Drug Use by Age</a></li>
+                <li><a href="/drug-frequency/0">Drug use by Frequency</a></li>
+                <li><a href="/input/alcohol/0/0">Drug use by User Input</a></li>
+            </ul>
 
             <!-- do we want to display the info with something other than graphs also?? -->
         </div>
