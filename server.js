@@ -152,13 +152,13 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     console.log(query);
   
     let response = template.toString();
-    if(name = 'pain_releiver'){
+    if(name == 'pain_releiver'){
       response = response.replaceAll("%%DRUG%%", 'Pain Relievers');
     } else{
       response = response.replaceAll("%%DRUG%%", nameCapital);
     }
     response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
-    response = response.replace("%%"+name+"_SELECTED%%", name + " selected"); //fix this
+    response = response.replace("%%"+name+"_SELECTED%%", name + " selected"); 
     db.all(query, [], (err, rows) => {
         if(rows != null) {
             if (err) {
