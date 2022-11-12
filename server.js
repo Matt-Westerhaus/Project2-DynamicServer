@@ -92,21 +92,41 @@ app.get('/drug-age/:age', (req, res) => { //Might have to change this to be more
   });
 });
 
-//Loads the drug-frequency.html page and executes the query to get the data for the specific page 
-app.get('/drug-frequency/:freq', (req, res) => {
+//Loads the drug-frequency.html page and executes the query to get the data for the specific page
+app.get('/drug-frequency/:name/:order', (req, res) => {
   fs.readFile(path.join(template_dir, 'drug-frequency.html'), (err, template) => {
     // modify `template` and send response
     // this will require a query to the SQL database
-    let query = 'SELECT * from drug_use';
-    response = "Query is: ";
+    let name = req.params.name;
+    let drugUse = req.params.name + '_use';
+    let order = name + "_" + req.params.order;
+    let formOrder = req.params.order.charAt(0).toUpperCase() + req.params.order.slice(1)
+    let drugFrequency = req.params.name + '_frequency';
+    let nameCapital = name.charAt(0).toUpperCase() + name.slice(1);
+    let secondaryOrder = "";
+    if(order === name + '_frequency'){
+      secondaryOrder = name + '_use';
+    } else{
+      secondaryOrder = name + '_frequency';
+    }
+    let query = 'SELECT age, ' + drugUse + ", " + drugFrequency + ' FROM drug_use ORDER BY ' + order + ' DESC, ' + secondaryOrder + ' DESC';
+    //some fuckery with null values
+    console.log(query);
+
+    response = template.toString();
+    response = response.replaceAll("%%DRUG%%", nameCapital);
+    response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
     db.all(query, [], (err, rows) => {
       if (err) {
         throw err;
       }
-      rows.forEach((row) => {
-        console.log(row.name);
-      });
-      res.status(200).type('html').send(template); // <-- you may need to change this
+      let table = "";
+      for(let i =0; i<rows.length; i++) {
+        console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
+        table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
+      };
+      response = response.replace("%%DRUG_DATA%%", table);
+      res.status(200).type('html').send(response); // <-- you may need to change this
     });
   });
 });
