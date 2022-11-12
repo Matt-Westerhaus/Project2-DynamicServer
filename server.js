@@ -160,20 +160,32 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
     response = response.replace("%%"+name+"_SELECTED%%", name + " selected"); //fix this
     db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      let table = "";
-      for(let i =0; i<rows.length; i++) {
-        console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
-        if(rows[i][drugFrequency] == ''){
-          rows[i][drugFrequency] = 'No data provided';
-          console.log("test"); //test
+        if(rows != null) {
+            if (err) {
+                fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                    let error_response = error_page.toString();
+                    error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                    res.status(404).type('html').send(error_response); 
+                });
+            }
+            let table = "";
+            for(let i =0; i<rows.length; i++) {
+              console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
+              if(rows[i][drugFrequency] == ''){
+                rows[i][drugFrequency] = 'No data provided';
+                console.log("test"); //test
+              }
+              table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
+            };
+            response = response.replace("%%DRUG_DATA%%", table);
+            res.status(200).type('html').send(response); // <-- you may need to change this
+        } else {
+            fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                let error_response = error_page.toString();
+                error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                res.status(404).type('html').send(error_response); 
+            });
         }
-        table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
-      };
-      response = response.replace("%%DRUG_DATA%%", table);
-      res.status(200).type('html').send(response); // <-- you may need to change this
     });
   });
 });
