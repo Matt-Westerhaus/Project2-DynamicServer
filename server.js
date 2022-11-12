@@ -196,7 +196,12 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
             response = response.replace("%%FREQ_INPUT%%", freq_num);
             if (rows!= null){ 
                 if(rows.length!= 0){
-                    response = response.replaceAll("%%DRUG%%", drug_capital);
+                    if(drug == "pain_releiver") {
+                        response = response.replaceAll("%%DRUG%%", "Pain Relievers");
+                    } else {
+                        response = response.replaceAll("%%DRUG%%", drug_capital);
+
+                    }
                     let drug_data = " ";
                     for(let i=0; i< rows.length; i++){
                         drug_data +="<tr>";
@@ -207,6 +212,7 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
                         drug_data +="</tr>";
                     }
                     response = response.replace("%%DRUG_DATA%%", drug_data);
+                    
                 } else {
                     response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
                     response = response.replace("%%DRUG_DATA%%", "");
