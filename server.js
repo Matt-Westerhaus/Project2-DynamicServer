@@ -151,20 +151,32 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     //some fuckery with null values
     console.log(query);
 
-    response = template.toString();
+    let response = template.toString();
     response = response.replaceAll("%%DRUG%%", nameCapital);
     response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
     db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      let table = "";
-      for(let i =0; i<rows.length; i++) {
-        console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
-        table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
-      };
-      response = response.replace("%%DRUG_DATA%%", table);
-      res.status(200).type('html').send(response); // <-- you may need to change this
+        if (rows == null) {
+            fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                let error_response = error_page.toString();
+                error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                res.status(404).type('html').send(error_response); 
+            });
+        } else {
+            if (err) {
+              fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                  let error_response = error_page.toString();
+                  error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                  res.status(404).type('html').send(error_response); 
+              });
+            }
+            let table = "";
+            for(let i =0; i<rows.length; i++) {
+              console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
+              table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
+            };
+            response = response.replace("%%DRUG_DATA%%", table);
+            res.status(200).type('html').send(response); // <-- you may need to change this
+        }
     });
   });
 });
