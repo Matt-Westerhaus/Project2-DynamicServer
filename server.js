@@ -163,7 +163,7 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
         console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
         if(rows[i][drugFrequency] == "''"){
           rows[i][drugFrequency] = 0;
-          console.log("test");
+          console.log("test"); //test
         }
         table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
       };
