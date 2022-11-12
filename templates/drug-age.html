@@ -7,8 +7,8 @@
     <title>Drug Use by Age</title>
     <link rel="stylesheet" href="/css/foundation.css" />
     <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
-    <!-- <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script> -->
-    <script type="application/javascript" src="/js/canvasjs-3/canvasjs.min.js"></script>
+    <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script> 
+    <!-- <script type="application/javascript" src="/js/canvasjs-3/canvasjs.min.js"></script> -->
 </head>
 
 <body style="background-color: lightgrey">
@@ -18,19 +18,16 @@
                 <button class="button" type="button" data-toggle="offCanvasLeft" style="float: left;">
                     <span aria-hidden="true" style="color: white; font-size: 1.5rem;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">
-                    Drug Use by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: inline-block; margin: auto; width: auto;">Drug Use by Age</h1>
             </div>
         </div>
 
         <div class="title-bar show-for-small-only">
             <div class="title-bar-top show-for-small-only" style="text-align: center; display: block; margin: auto;">
-                <button class="button" type="button" data-toggle="offCanvasTop"
-                    style="margin: auto; display: block; width: auto;">
+                <button class="button" type="button" data-toggle="offCanvasTop" style="margin: auto; display: block; width: auto;">
                     <span aria-hidden="true" style="color: white;">Menu</span>
                 </button>
-                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use
-                    by Age</h1>
+                <h1 style="text-align: center; font-size: 2.75rem; display: block; margin: auto; width: auto;">Drug Use by Age</h1>
             </div>
         </div>
     </div>
@@ -62,23 +59,20 @@
         </div>
     </div>
 
-    <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
+            <!-- previous/next buttons -->
             <div id="nav-buttons">
-                <button id="previous-button" type="button"
-                    style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold;"
-                    onclick="navButtons()" hidden>Previous</button>
-                <button id="next-button" type="button"
-                    style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold;"
-                    onclick="navButtons()">Next</button>
+                <button id="previous-button" type="button" style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('previous')" hidden>Previous</button>
+                <button id="next-button" type="button" style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('next')">Next</button>
             </div>
             <br /><br /><br />
+            <!-- Age input drop-down option list -->
             <div id="user-age-input-container"
                 style="margin: auto; width: auto; display: flex; justify-content: center;">
                 <p>Select an age to see details:</p> &nbsp; &nbsp;
                 <select name="age" id="age-input-dropdown" style="width: 130px;" onchange="getDrugUseByAge()" required>
-                    <option value="12" selected>12</option>
+                    <option value="12">12</option>
                     <option value="13">13</option>
                     <option value="14">14</option>
                     <option value="15">15</option>
@@ -98,8 +92,16 @@
                 </select>
             </div>
 
-            <div id="chartContainer" style="height: 500px; width: 90%; margin: auto;"></div>
+            <!-- Chart -->
+            <div id="chartContainer" style="height: 500px; width: 90%; margin: auto;"></div> 
 
+            <!-- Instructions container -->
+            <div style="width: 75%; margin: auto; margin-top: 10px; text-align: center; border: 1px solid black;">
+                <h1 style="font-size: 20px; font-weight: bold;">Instructions:</h1>
+                <p>Select an age/age group from the dropdown menu to see that age's drug usage data.</p>
+                <p>Highlight a section in the chart to zoom in on those specific values. When done, click the reset button at the top right to go back to the original graph.</p>
+
+            </div>
 
         </div>
     </div>
@@ -114,152 +116,102 @@
 </script>
 
 <script>
-    window.onload = function () {
-        var chart = new CanvasJS.Chart('chartContainer', {
-            title: {
-                text: 'Drug Use by Age'
-            },
-            axisY: {
-                title: 'percent'
-            },
-            data: [{
-                type: 'column',
-                dataPoints: [
 
-                ]
-            }]
-        });
-        chart.render();
-
-        $(document).ready(() => {
-            let vals = $('#returned-json').text();
-            let arr = vals.split(',');
-            let chartArr = [];
-            let i;
-            console.log(arr.length);
-            for (i = 0; i < arr.length; i++) {
-                console.log(arr[i]);
-                if (i == 0) {
-                    //console.log((+ arr[i]));
-                    chartArr[i] = { y: (+ arr[i]), label: "# people" };
-                }
-                if (i == 1) {
-                    chartArr[i] = { y: (+ arr[i]), label: "alcohol" };
-                }
-                if (i == 2) {
-                    chartArr[i] = { y: (+ arr[i]), label: "marijuana" };
-                }
-                if (i == 3) {
-                    chartArr[i] = { y: (+ arr[i]), label: "cocaine" };
-                }
-                if (i == 4) {
-                    chartArr[i] = { y: (+ arr[i]), label: "crack" };
-                }
-                if (i == 5) {
-                    chartArr[i] = { y: (+ arr[i]), label: "heroin" };
-                }
-                if (i == 6) {
-                    chartArr[i] = { y: (+ arr[i]), label: "hallucinogen" };
-                }
-                if (i == 7) {
-                    chartArr[i] = { y: (+ arr[i]), label: "inhalant" };
-                }
-                if (i == 8) {
-                    chartArr[i] = { y: (+ arr[i]), label: "pain reliever" };
-                }
-                if (i == 9) {
-                    chartArr[i] = { y: (+ arr[i]), label: "oxycontin" };
-                }
-                if (i == 10) {
-                    chartArr[i] = { y: (+ arr[i]), label: "tranquilizer" };
-                }
-                if (i == 11) {
-                    chartArr[i] = { y: (+ arr[i]), label: "stimulant" };
-                }
-                if (i == 12) {
-                    chartArr[i] = { y: (+ arr[i]), label: "meth" };
-                }
-                if (i == 13) {
-                    chartArr[i] = { y: (+ arr[i]), label: "sedative" };
-                }
-                console.log(chartArr[i])
-                chart.options.data.push(chartArr[i]);
-            }
-            chart.render();
-        });
-    };
-
-    //Gets the age val from the url and parses it, sets the val to the dropdown list
-    $(document).ready(() => {
-        let ageVal = window.location.pathname;
-        let ageValInt = parseInt(ageVal.replace(/[^0-9]/g, ''));
-        $('#age-input-dropdown').val(ageValInt);
+    var chart = new CanvasJS.Chart('chartContainer', {
+        zoomEnabled: true,
+        panEnabled: true,
+        title: {
+            text: 'Drug Use by Age'
+        },
+        subtitles: [{
+            text: 'Sample size: %%SUBTITLE%%'
+        }],
+        axisY: {
+            title: 'Percent of Age Group'
+        },
+        axisX: {
+            title: 'Drug'
+        },
+        data: [{
+            dataPoints: []
+        }]
     });
 
-    //parses the string of values from json
-    function parseJsonVals() {
-        let vals = $('#returned-json').val();
-        let arr = vals.split(',');
-        let chartArr = [];
-        let i;
-        for (i = 0; i < arr.length; i++) {
-            if (i = 0) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "# people"}';
-            } else if (i = 1) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "alcohol"}';
-            } else if (i = 3) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "marijuana"}';
-            } else if (i = 4) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "cocaine"}';
-            } else if (i = 5) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "crack"}';
-            } else if (i = 6) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "heroin"}';
-            } else if (i = 7) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "hallucinogen"}';
-            } else if (i = 8) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "inhalant"}';
-            } else if (i = 9) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "pain reliever"}';
-            } else if (i = 10) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "oxycontin"}';
-            } else if (i = 11) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "tranquilizer"}';
-            } else if (i = 12) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "stimulant"}';
-            } else if (i = 13) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "meth"}';
-            } else if (i = 14) {
-                chartArr[i] = '{y: ' + arr[i] + ', label: "sedative"}';
-            }
-            chart.data[0].addTo('dataPoints', chartArr[i]);
-        }
-        chart.render();
-    };
+    let arr = "%%DATAARRAY%%";
+    let chartArr = [];
+    let i;
+    for (i = 0; i < arr.length; i++) {
+        if (i == 0) {
+            chartArr[i] = { y: arr[i], label: "# people" };
+        } else if (i == 1) {
+            chartArr[i] = { y: arr[i], label: "alcohol" };
+        } else if (i == 2) {
+            chartArr[i] = { y: arr[i], label: "marijuana" };
+        } else if (i == 3) {
+            chartArr[i] = { y: arr[i], label: "cocaine" };
+        } else if (i == 4) {
+            chartArr[i] = { y: arr[i], label: "crack" };
+        } else if (i == 5) {
+            chartArr[i] = { y: arr[i], label: "heroin" };
+        } else if (i == 6) {
+            chartArr[i] = { y: arr[i], label: "hallucinogen" };
+        } else if (i == 7) {
+            chartArr[i] = { y: arr[i], label: "inhalant" };
+        } else if (i == 8) {
+            chartArr[i] = { y: arr[i], label: "pain reliever" };
+        } else if (i == 9) {
+            chartArr[i] = { y: arr[i], label: "oxycontin" };
+        } else if (i == 10) {
+            chartArr[i] = { y: arr[i], label: "tranquilizer" };
+        } else if (i == 11) {
+            chartArr[i] = { y: arr[i], label: "stimulant" };
+        } else if (i == 12) {
+            chartArr[i] = { y: arr[i], label: "meth" };
+        } else if (i == 13) {
+            chartArr[i] = { y: arr[i], label: "sedative" };
+        } 
 
-    //creates sql query to get data for drug use by age 
+        if (i == 0) { //if i = 1, then set to variable to hold total # people. else push to chart
+
+        } else {
+            chart.options.data[0].dataPoints.push(chartArr[i]); 
+        }
+
+    }
+    chart.render();
+
+
+
+
+    //Gets the age val from the url and parses it, sets the val to the dropdown list
+    $(document).ready(() => { //REPLACE THIS WITH %%BLAH%% IN HTML AND REPLACE IT WITH THE VALUE
+        //let ageVal = window.location.pathname;
+        //let ageValInt = parseInt(ageVal.replace(/[^0-9]/g, ''));
+        $('#age-input-dropdown').val("%%AGEVAL%%");
+    });
+
+    //loads the page with the selected age value from the drop-down list
     function getDrugUseByAge() {
         var specifiedAge = parseInt($('#age-input-dropdown').val());
         window.open(specifiedAge, '_self');
     };
 
     //controlls the navigation buttons
-    function navButtons(direction) { //GONNA HAVE TO CHANGE THE VALUES IN OPEN() CAUSE WINDOW.OPEN APPENDS THE VALUE TO THE CURRENT URL. ADD '_SELF' TO OPEN IN SAME WINDOW.
+    function navButtons(direction) {
         var currentUrl = $(location).attr('href');
         if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
-            window.open('drug-frequency');
+            location.replace('/drug-frequency/0');
         } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
             if (direction === 'previous') {
-                window.open('drug-age/12');
+                location.replace('/drug-age/12');
             } else if (direction === 'next') {
-                window.open('drug-frequency');
+                location.replace('/input/alcohol/0/0');
             }
         } else if (currentUrl.includes('input')) { //if on drug-input, only have a previous button.
             if (direction === 'previous') {
-                window.open('drug-frequency');
+                location.replace('/drug-frequency/0');
             }
         }
-
     };
 
 

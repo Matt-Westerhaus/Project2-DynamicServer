@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Drug Use by User Input</title>
     <link rel="stylesheet" href="/css/foundation.css" />
-    <link rel="stylesheet" href="/css/drugs.css" />
     <script type="application/javascript" src="/js/jquery-3.6.1.min.js"></script>
     <script type="application/javascript" src="/js/canvasjs-3/jquery.canvasjs.min.js"></script>
 </head>
@@ -59,15 +58,24 @@
         </div>
     </div>
 
-    <!-- Page contents go below here: -->
     <div class="off-canvas-wrapper">
         <div class="off-canvas-content" data-off-canvas-content>
-            <!-- put the canvas for the graphs here -->
-            <br/><br/><br/><br/><br/><br/>
+            <!-- previous/next buttons -->
+            <div id="nav-buttons">
+                <button id="previous-button" type="button" style="border: 2px solid black; float: left; margin-left: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('previous')">Previous</button>
+                <button id="next-button" type="button" style="border: 2px solid black; float: right; margin-right: 20px; margin-top: 20px; padding: 5px; font-weight: bold; background-color: #b3b3b3;" onclick="navButtons('next')" hidden>Next</button>
+            </div>
+
+            <br/><br/><br/>
             <div class="grid-container">
                 <div class="grid-x grid-padding-x">
-                    <div class="cell large-auto" style="background-color: #BFB48F; text-align: center;">
-                    <h2>Welcome! On this    </h2>
+                    <div class="cell large-auto" style="background-color: #BFB48F; text-align: center; border:3px solid #252627; ">
+                     <h3 style="margin-bottom: 2px;">Instructions:</h3>
+                    <p>    In the dropbox choose a drug that you would like to collect data on. <br/>
+                        In the first text box type how much <br/>
+                        In the second text box
+
+                    </p>
                     
                     </div>
                 </div>
@@ -102,7 +110,7 @@
                     </div>
                     <div class="cell small-10 " style="background-color: #BFB48F;"></div>
                     <div class="cell small-2" style="background-color: #BFB48F;">
-                        <input type="submit" id="submit-input" onclick="submitted()">
+                        <input type="submit" id="submit-input" onclick="submitted()" style="margin-bottom: 10px;">
                     </div>
                     <script>
                         function submitted(){
@@ -112,7 +120,6 @@
                             window.location.href = '/input/' + drug_type + '/' + use + '/' + freq;
                         }
                     </script>
-                    
                 </div>
                 <table style="text-align:center; "><!--%%DISPLAYNONE%%-->
                     <thead>
@@ -127,6 +134,13 @@
                         %%DRUG_DATA%%
                     </tbody>
                 </table>
+                <script>
+                    //%%ALERT_FLAG%%
+                </script>
+                <p style="display:none;"> 
+                    
+
+                </p>
                 
                 
             </div>
@@ -149,74 +163,24 @@
 </script>
 
 <script>
-    /* Example of using canvasJS:
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = ["red", "green","blue","orange","brown"];
 
-    new Chart("myChart", {
-    type: "bar",
-    data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor: barColors,
-      data: yValues
-    }]
-    },
-    options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      text: "World Wine Production 2018"
-    }
-    }
-    });
-    */
-
-    window.onload = function () {
-        //$('chartContainer').CanvasJSChart({ }) //could use jquery call instead 
-        /*
-        var chart = new CanvasJS.Chart('chartContainer', {
-            type: "bar",
-            title:{
-                text: 'Drug Use by Age'
-            },
-            data: { 
-                type: 'column',
-                datasets: [
-                    {
-                        label: "",
-                        data: '', //pass in as array type (use functions to build from database)
-                        backgroundColor: '',
-                        yAxisID: '',
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [
-                        {
-                            id: '',
-                           ticks: {
-                                beginAtZero: true,
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: ''
-                            }
-                        },
-                    ]
-                },
-            },
-        });    
-        chart.render();
-        */
-    }
-
-    //Have our functions that get and compile the data for the selected metric, which we then use to pass into the chart via jQuery
-
-
-
+    //controlls the navigation buttons
+    function navButtons(direction) {
+        var currentUrl = $(location).attr('href');
+        if (currentUrl.includes('drug-age')) { //if on drug-age, only have a next button.
+            location.replace('/drug-frequency/0');
+        } else if (currentUrl.includes('drug-frequency')) { //if on drug-frequency, have previous and next button.
+            if (direction === 'previous') {
+                location.replace('/drug-age/12');
+            } else if (direction === 'next') {
+                location.replace('/input/alcohol/0/0');
+            }
+        } else if (currentUrl.includes('input')) { //if on drug-input, only have a previous button.
+            if (direction === 'previous') {
+                location.replace('/drug-frequency/0');
+            }
+        }
+    };
 
 
 

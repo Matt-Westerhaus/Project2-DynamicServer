@@ -5,6 +5,8 @@ let path = require('path');
 // NPM modules
 let express = require('express');
 let sqlite3 = require('sqlite3');
+const { response } = require('express');
+const e = require('express');
 
 let public_dir = path.join(__dirname, 'public');
 let template_dir = path.join(__dirname, 'templates');
@@ -39,55 +41,91 @@ app.get('/', (req, res) => {
 
 //This loads the index.html template for menu button click or "/" in the url.
 app.get('/', (req, res) => {
-  fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
-    // modify `template` and send response
-    // this will require a query to the SQL database
-    let query = 'SELECT * from drug_use';
-    response = "Query is: ";
-    db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      res.status(200).type('html').send(template); // <-- you may need to change this
-    });
-  });
+    try{
+        fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
+            // modify `template` and send response
+            // this will require a query to the SQL database
+            let query = 'SELECT * from drug_use';
+            db.all(query, [], (err, rows) => {
+              if (err) {
+                throw err;
+              }
+              res.status(200).type('html').send(template); 
+            });
+        });
+    } catch (err) {
+        fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+            res.status(404).type('html').send(error_page); 
+        });
+    }
 });
 
 
 //Loads the drug-age.html page and executes the query to get the data for the selected age.
-app.get('/drug-age/:age', (req, res) => { //Might have to change this to be more like the expressdynamic class example... 
+app.get('/drug-age/:age', (req, res) => {
   fs.readFile(path.join(template_dir, 'drug-age.html'), (err, template) => {
     let age = parseInt(req.params.age);
+    if(age <= 12){
+      age = 12;
+    } else if(12 <= age && age <= 21){
+      age = age;
+    } else if(age == 22 || age == 23){
+      age = 22;
+    } else if(age == 24 || age == 25){
+      age = 24;
+    } else if(26 <= age && age <= 29){
+      age = 26;
+    } else if(30 <= age && age <= 34){
+      age = 30;
+    } else if(35 <= age && age <= 49){
+      age = 35;
+    } else if(50 <= age && age<= 64){
+      age = 50;
+    } else if(age >= 65){
+      age = 65;
+    } else if(age > 100){
+      age = 65;
+    }
+
     let query = 'SELECT number, alcohol_use, marijuana_use, cocaine_use, crack_use, heroin_use, hallucinogen_use, inhalant_use, pain_releiver_use, oxycontin_use, tranquilizer_use, stimulant_use, meth_use, sedative_use FROM drug_use WHERE age_group = ' + age;
-    console.log(query);
-
+    
     db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      rows.forEach((row) => {
-        console.log(row);
-      });
-      template = template + '<p id="returned-json">';
-      rows.forEach((row) => {
-        template = template + row.number + ', ';
-        template = template + row.alcohol_use + ', ';
-        template = template + row.marijuana_use + ', ';
-        template = template + row.cocaine_use + ', ';
-        template = template + row.crack_use + ', ';
-        template = template + row.heroin_use + ', ';
-        template = template + row.hallucinogen_use + ', ';
-        template = template + row.inhalant_use + ', ';
-        template = template + row.pain_releiver_use + ', ';
-        template = template + row.oxycontin_use + ', ';
-        template = template + row.tranquilizer_use + ', ';
-        template - template + row.stimulant_use + ', ';
-        template = template + row.meth_use + ', ';
-        template = template + row.sedative_use + ', ';
-
-      })
-      template = template +'</p>';
-      res.status(200).type('html').send(template); //html & template, or json & rows
+        if (err) {
+            fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                let error_response = error_page.toString();
+                error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                res.status(404).type('html').send(error_response); 
+            });
+        } else {
+            rows.forEach((row) => {
+              console.log(row);
+            });
+            template = template.toString();
+            let sampSize = '';
+            let dataArray = '[';
+            rows.forEach((row) => {
+              sampSize = row.number;
+              dataArray = dataArray + row.number + ', ';
+              dataArray = dataArray+ row.alcohol_use + ', ';
+              dataArray = dataArray + row.marijuana_use + ', ';
+              dataArray = dataArray + row.cocaine_use + ', ';
+              dataArray = dataArray + row.crack_use + ', ';
+              dataArray = dataArray + row.heroin_use + ', ';
+              dataArray = dataArray + row.hallucinogen_use + ', ';
+              dataArray = dataArray + row.inhalant_use + ', ';
+              dataArray = dataArray + row.pain_releiver_use + ', ';
+              dataArray = dataArray + row.oxycontin_use + ', ';
+              dataArray = dataArray + row.tranquilizer_use + ', ';
+              dataArray = dataArray + row.stimulant_use + ', ';
+              dataArray = dataArray + row.meth_use + ', ';
+              dataArray = dataArray + row.sedative_use;
+            })
+            dataArray = dataArray + ']';
+            template = template.replace('"%%DATAARRAY%%"', dataArray);
+            template = template.replace('%%SUBTITLE%%', sampSize);
+            template = template.replace("%%AGEVAL%%", age);
+            res.status(200).type('html').send(template); 
+        }
     });
   });
 });
@@ -145,38 +183,52 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
         // this will require a query to the SQL database
         let query = "SELECT age, number, " + use + ", " + freq + " FROM drug_use WHERE " + use + " >= " + use_num + " AND " + freq + " >= " +  freq_num;
         //let query1 = "SELECT age, number, ?, ? FROM drug_use WHERE ? >= ? AND ? >= ?";
+        
         db.all(query, [], (err, rows) => {
             let response = template.toString();
             //response = response.replace();
             response = response.replace("%%"+drug+"_SELECTED%%", drug + " selected");
             response = response.replace("%%USE_INPUT%%", use_num);
             response = response.replace("%%FREQ_INPUT%%", freq_num);
-
-            if(rows.length!= 0){
-                response = response.replaceAll("%%DRUG%%", drug_capital);
-                let drug_data = " ";
-                for(let i=0; i< rows.length; i++){
-                    drug_data +="<tr>";
-                    drug_data +="<td>" + rows[i].age + "</td>";
-                    drug_data +="<td>" + rows[i].number + "</td>";
-                    drug_data +="<td>" + rows[i][use] + "% </td>";
-                    drug_data +="<td>" + rows[i][freq] + "</td>";
-                    drug_data +="</tr>";
+            if (rows!= null){ 
+                if(rows.length!= 0){
+                    response = response.replaceAll("%%DRUG%%", drug_capital);
+                    let drug_data = " ";
+                    for(let i=0; i< rows.length; i++){
+                        drug_data +="<tr>";
+                        drug_data +="<td>" + rows[i].age + "</td>";
+                        drug_data +="<td>" + rows[i].number + "</td>";
+                        drug_data +="<td>" + rows[i][use] + "% </td>";
+                        drug_data +="<td>" + rows[i][freq] + "</td>";
+                        drug_data +="</tr>";
+                    }
+                    response = response.replace("%%DRUG_DATA%%", drug_data);
+                } else {
+                    response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
+                    response = response.replace("%%DRUG_DATA%%", "");
+                    response = response.replace('<p style="display:none;"> ', '<p> ');
+                    response = response.replace("//%%ALERT_FLAG%%", "alert('No Ages Meet These Criteria');");
                 }
-                response = response.replace("%%DRUG_DATA%%", drug_data);
+                res.status(200).type('html').send(response);
             } else {
-                response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
-                response = response.replace("%%DRUG_DATA%%", "Hello");
+                fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+                    let error_response = error_page.toString();
+                    error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+                    res.status(404).type('html').send(error_response); 
+                });
             }
-            
-
-            res.status(200).type('html').send(response);
-          });
+        });
+        
     });
 });
 
-
-
+app.use((req, res, next) => {
+    fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+        let error_response = error_page.toString();
+        error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+        res.status(404).type('html').send(error_response); 
+    });
+})
 
 
 app.listen(port, () => {
