@@ -150,7 +150,7 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     }
     let query = 'SELECT age, ' + drugUse + ", " + drugFrequency + ' FROM drug_use ORDER BY ' + order + ' DESC, ' + secondaryOrder + ' DESC';
     //some fuckery with null values
-    //console.log(query);
+    console.log(query);
   
     let response = template.toString();
     if(name == 'pain_releiver'){
@@ -172,7 +172,10 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
           rows[i][drugFrequency] = 'No data provided';
           //console.log("test"); //test
         }
+        table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
       }
+      response = response.replace('%%DRUG_DATA%%', table);
+      res.status(200).type('html').send(response);
     });
   });
 });
