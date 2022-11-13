@@ -29,22 +29,10 @@ let db = new sqlite3.Database(db_filename, sqlite3.OPEN_READONLY, (err) => {
 app.use(express.static(public_dir));
 
 
-// GET request handler for home page '/' (redirect to desired route)
-/*
-app.get('/', (req, res) => {
-    let home = '/templates/index.html'; // <-- change this
-    res.redirect(home);
-
-});
-*/
-
-
 //This loads the index.html template for menu button click or "/" in the url.
 app.get('/', (req, res) => {
     try{
         fs.readFile(path.join(template_dir, 'index.html'), (err, template) => {
-            // modify `template` and send response
-            // this will require a query to the SQL database
             let query = 'SELECT * from drug_use';
             db.all(query, [], (err, rows) => {
               if (err) {
@@ -97,9 +85,6 @@ app.get('/drug-age/:age', (req, res) => {
                 res.status(404).type('html').send(error_response); 
             });
         } else {
-            rows.forEach((row) => {
-              console.log(row);
-            });
             template = template.toString();
             let sampSize = '';
             let dataArray = '[';
@@ -133,8 +118,6 @@ app.get('/drug-age/:age', (req, res) => {
 //Loads the drug-frequency.html page and executes the query to get the data for the specific page
 app.get('/drug-frequency/:name/:order', (req, res) => {
   fs.readFile(path.join(template_dir, 'drug-frequency.html'), (err, template) => {
-    // modify `template` and send response
-    // this will require a query to the SQL database
     let name = req.params.name;
     let drugUse = req.params.name + '_use';
     let order = name + "_" + req.params.order;
@@ -149,8 +132,6 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
       secondaryOrder = name + '_frequency';
     }
     let query = 'SELECT age, ' + drugUse + ", " + drugFrequency + ' FROM drug_use ORDER BY ' + order + ' DESC, ' + secondaryOrder + ' DESC';
-    //some fuckery with null values
-    console.log(query);
   
     let response = template.toString();
     if(name == 'pain_releiver'){
@@ -162,20 +143,30 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     response = response.replace("%%"+name+"_SELECTED%%", name + " selected"); 
     response = response.replace("%%"+orderType+"_SELECTED%%", orderType + " selected");
     db.all(query, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      let table = "";
-      for(let i =0; i<rows.length; i++) {
-        console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
-        if(rows[i][drugFrequency] == ''){
-          rows[i][drugFrequency] = 'No data provided';
-          //console.log("test"); //test
+      if (rows!=null) {
+        if (err) {
+          fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+            let error_response = error_page.toString();
+            error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+            res.status(404).type('html').send(error_response); 
+        });
         }
-        table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
+        let table = "";
+        for(let i =0; i<rows.length; i++) {
+          if(rows[i][drugFrequency] == ''){
+            rows[i][drugFrequency] = 'No data provided';
+          }
+          table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
+        }
+        response = response.replace('%%DRUG_DATA%%', table);
+        res.status(200).type('html').send(response);
+      } else {
+        fs.readFile(path.join(template_dir, 'error_page.html'), (err, error_page) => {
+          let error_response = error_page.toString();
+          error_response = error_response.replace("%%PAGE_ERROR_MESSAGE%%", req.url);
+          res.status(404).type('html').send(error_response); 
+      });
       }
-      response = response.replace('%%DRUG_DATA%%', table);
-      res.status(200).type('html').send(response);
     });
   });
 });
@@ -189,15 +180,12 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
         let freq = req.params.drug +"_frequency";
         let use_num = req.params.use;
         let freq_num = req.params.freq;
-        
-        // modify `template` and send response
-        // this will require a query to the SQL database
+
         let query = "SELECT age, number, " + use + ", " + freq + " FROM drug_use WHERE " + use + " >= " + use_num + " AND " + freq + " >= " +  freq_num;
-        //let query1 = "SELECT age, number, ?, ? FROM drug_use WHERE ? >= ? AND ? >= ?";
+
         
         db.all(query, [], (err, rows) => {
             let response = template.toString();
-            //response = response.replace();
             response = response.replace("%%"+drug+"_SELECTED%%", drug + " selected");
             response = response.replace("%%USE_INPUT%%", use_num);
             response = response.replace("%%FREQ_INPUT%%", freq_num);
@@ -209,8 +197,12 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
                         response = response.replaceAll("%%DRUG%%", drug_capital);
 
                     }
+                    
                     let drug_data = " ";
                     for(let i=0; i< rows.length; i++){
+                      if(rows[i][freq] == ''){
+                        rows[i][freq] = 'No data provided';
+                      }
                         drug_data +="<tr>";
                         drug_data +="<td>" + rows[i].age + "</td>";
                         drug_data +="<td>" + rows[i].number + "</td>";
