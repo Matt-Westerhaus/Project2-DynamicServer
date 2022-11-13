@@ -139,6 +139,8 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
     } else{
       response = response.replaceAll("%%DRUG%%", nameCapital);
     }
+    
+    response = response.replaceAll("%%DRUG_PIC%%", name);
     response = response.replaceAll('%%DRUG_ORDER%%', formOrder);
     response = response.replace("%%"+name+"_SELECTED%%", name + " selected"); 
     response = response.replace("%%"+orderType+"_SELECTED%%", orderType + " selected");
@@ -197,6 +199,7 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
                         response = response.replaceAll("%%DRUG%%", drug_capital);
 
                     }
+                    response = response.replaceAll("%%DRUG_PIC%%", drug);
                     
                     let drug_data = " ";
                     for(let i=0; i< rows.length; i++){
