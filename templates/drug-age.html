@@ -70,7 +70,7 @@
             <!-- Age input drop-down option list -->
             <div id="user-age-input-container"
                 style="margin: auto; width: auto; display: flex; justify-content: center;">
-                <p>Select an age to see details:</p> &nbsp; &nbsp;
+                <p>Select an age/age-group to see details:</p> &nbsp; &nbsp;
                 <select name="age" id="age-input-dropdown" style="width: 130px;" onchange="getDrugUseByAge()" required>
                     <option value="12">12</option>
                     <option value="13">13</option>
@@ -98,15 +98,12 @@
             <!-- Instructions container -->
             <div style="width: 75%; margin: auto; margin-top: 10px; text-align: center; border: 1px solid black;">
                 <h1 style="font-size: 20px; font-weight: bold;">Instructions:</h1>
-                <p>Select an age/age group from the dropdown menu to see that age's drug usage data.</p>
-                <p>Highlight a section in the chart to zoom in on those specific values. When done, click the reset button at the top right to go back to the original graph.</p>
+                <p>Select an age/age-group from the dropdown menu to see that age's drug usage data.</p>
+                <p>Highlight a section of at least 3 columns in the chart to zoom in on those specific values. When done, click the reset button at the top right to go back to the original graph.</p>
 
             </div>
-
         </div>
     </div>
-
-
 </body>
 
 <script src="/js/vendor.js"></script>
@@ -171,16 +168,13 @@
             chartArr[i] = { y: arr[i], label: "sedative" };
         } 
 
-        if (i != 1) { // 1 holds sample size #
+        if (i != 0) { // 0 holds sample size #
             chart.options.data[0].dataPoints.push(chartArr[i]); 
         }
     }
     chart.render();
 
-
-
-
-    //Gets the age val from the url and parses it, sets the val to the dropdown list
+    //sets the selected option in the drop-down list.
     $(document).ready(() => { 
         $('#age-input-dropdown').val("%%AGEVAL%%");
     });
@@ -209,8 +203,5 @@
         }
     };
 
-
-
 </script>
-
 </html>

@@ -145,6 +145,8 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
       secondaryOrder = name + '_frequency';
     }
     let query = 'SELECT age, ' + drugUse + ", " + drugFrequency + ' FROM drug_use ORDER BY ' + order + ' DESC, ' + secondaryOrder + ' DESC';
+    //some fuckery with null values
+    console.log(query);
   
     let response = template.toString();
     if(name == 'pain_releiver'){
@@ -165,8 +167,10 @@ app.get('/drug-frequency/:name/:order', (req, res) => {
             }
             let table = "";
             for(let i =0; i<rows.length; i++) {
+              console.log(rows[i]); //add if rows freq = '' replace with 0, add note that data only goes to the tenth of a percent
               if(rows[i][drugFrequency] == ''){
                 rows[i][drugFrequency] = 'No data provided';
+                console.log("test"); //test
               }
               table = table + "<tr>" + "<td>" + rows[i].age + "</td>" + "<td>" + rows[i][drugUse] + "</td>" + "<td>" + rows[i][drugFrequency] + "</td>" + "</tr>";
             };
