@@ -192,14 +192,15 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
             response = response.replace("%%USE_INPUT%%", use_num);
             response = response.replace("%%FREQ_INPUT%%", freq_num);
             if (rows!= null){ 
-                if(rows.length!= 0){
-                    if(drug == "pain_releiver") {
-                        response = response.replaceAll("%%DRUG%%", "Pain Relievers");
-                    } else {
-                        response = response.replaceAll("%%DRUG%%", drug_capital);
+              if(drug == "pain_releiver") {
+                response = response.replaceAll("%%DRUG%%", "Pain Relievers");
+            } else {
+                response = response.replaceAll("%%DRUG%%", drug_capital);
 
-                    }
-                    response = response.replaceAll("%%DRUG_PIC%%", drug);
+            }
+            response = response.replaceAll("%%DRUG_PIC%%", drug);
+                if(rows.length!= 0){
+                    
                     
                     let drug_data = " ";
                     for(let i=0; i< rows.length; i++){
@@ -216,10 +217,11 @@ app.get('/input/:drug/:use/:freq', (req, res) => {
                     response = response.replace("%%DRUG_DATA%%", drug_data);
                     
                 } else {
-                    response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
-                    response = response.replace("%%DRUG_DATA%%", "");
-                    response = response.replace('<p style="display:none;"> ', '<p> ');
-                    response = response.replace("//%%ALERT_FLAG%%", "alert('No Ages Meet These Criteria');");
+                  response = response.replace('"><!--%%DISPLAYNONE%%-->',' display: none;">');
+                  response = response.replace("%%DRUG_DATA%%", "");
+                  response = response.replace('<p style="display:none;"> ', '<p> ');
+                  response = response.replace("//%%ALERT_FLAG%%", "alert('No Ages Meet These Criteria');");
+                    
                 }
                 res.status(200).type('html').send(response);
             } else {
